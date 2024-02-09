@@ -1,0 +1,55 @@
+name: bdc
+description: A new Flutter project.
+version: 1.0.0+1
+environment: 
+  sdk: '>=2.17.0 <3.0.0'
+dependencies: 
+  flutter: 
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  intl: any
+
+  font_awesome_flutter: '>= 4.7.0'
+  flutter_markdown: ^0.6.3
+  cupertino_icons: ^1.0.2
+  image_picker: 
+  get:  ^4.6.5
+  google_maps_widget:
+  cached_network_image: ^3.2.1
+  flutter_svg: ^1.1.6
+  google_maps_flutter:
+  geolocator: ^10.1.0
+
+dev_dependencies: 
+  flutter_test: 
+    sdk: flutter
+flutter:
+  generate: true
+  uses-material-design: true
+  assets: 
+    - assets/
+    - assets/images/
+  fonts: 
+    - family: Montserrat
+      fonts: 
+        - asset: assets/fonts/MontserratBold.ttf
+          weight: 700
+        - asset: assets/fonts/MontserratRomanMedium.ttf
+          weight: 500
+        - asset: assets/fonts/MontserratRomanBold.ttf
+          weight: 700
+        - asset: assets/fonts/MontserratRegular.ttf
+          weight: 400
+        - asset: assets/fonts/MontserratRomanExtraBold.ttf
+          weight: 800
+        - asset: assets/fonts/MontserratSemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/MontserratMedium.ttf
+          weight: 500
+    - family: Roboto
+      fonts: 
+        - asset: assets/fonts/RobotoRomanBold.ttf
+          weight: 700
+        - asset: assets/fonts/RobotoRomanRegular.ttf
+          weight: 400
