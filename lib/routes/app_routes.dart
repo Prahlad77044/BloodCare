@@ -27,7 +27,6 @@ import 'package:bdc/presentation/donor_detail_screen/donor_detail_screen.dart';
 import 'package:bdc/presentation/info_screen/info_screen.dart';
 import 'package:bdc/presentation/upload_profile_photo_two_screen/upload_profile_photo_two_screen.dart';
 import 'package:bdc/presentation/upload_profile_photo_screen/upload_profile_photo_screen.dart';
-import 'package:bdc/presentation/requests_screen/pendingrequests.dart';
 import 'package:bdc/presentation/doc_home_page_screen/doc_home_page_screen.dart';
 import 'package:bdc/presentation/app_navigation_screen/app_navigation_screen.dart';
 
@@ -145,7 +144,6 @@ class AppRoutes {
     donorDetailScreen: (context) => DonorDetailScreen(),
     uploadProfilePhotoTwoScreen: (context) => UploadProfilePhotoTwoScreen(),
     uploadProfilePhotoScreen: (context) => UploadProfilePhotoScreen(),
-    requestsScreen: (context) => RequestsScreen(),
     docHomePageScreen: (context) => DocHomePageScreen(),
     appNavigationScreen: (context) => AppNavigationScreen(),
     donateFromHomeBottomsheet: (context) => DonateFromHomeBottomsheet(),

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:js';
 
 import 'package:http/http.dart' as http;
 import 'package:bdc/core/app_export.dart';
