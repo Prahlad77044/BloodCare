@@ -2,8 +2,8 @@ import 'package:bdc/core/app_export.dart';
 import 'package:flutter/material.dart';
 
 // ignore_for_file: must_be_immutable
-class SuccessfulVerified extends StatelessWidget {
-  const SuccessfulVerified({Key? key})
+class SuccessfulReqVerified extends StatelessWidget {
+  const SuccessfulReqVerified({Key? key})
       : super(
           key: key,
         );
@@ -61,7 +61,7 @@ class SuccessfulVerified extends StatelessWidget {
                 padding: EdgeInsets.only(left: 39.0),
                 child: Center(
                   child: Text(
-                    "Your Account has been created successfully. ",
+                    "Your Request has been verified. ",
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 20,

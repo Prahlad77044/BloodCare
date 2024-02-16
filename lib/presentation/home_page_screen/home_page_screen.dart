@@ -25,9 +25,7 @@ class HomePageScreen extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         home: Scaffold(
             appBar: AppBar(
-              title: Text(
-               ''
-              ),
+              title: Text(''),
               backgroundColor: Colors.red[800],
               elevation: 0,
             ),
@@ -37,9 +35,8 @@ class HomePageScreen extends StatelessWidget {
                 children: [
                   DrawerHeader(
                       child: Image.asset(
-                        'assets/images/blood.png',
-                      )),
-
+                    'assets/images/blood.png',
+                  )),
                   ListTile(
                     onTap: () {
                       Navigator.pushNamed(context, '/home_page_screen');
@@ -55,9 +52,7 @@ class HomePageScreen extends StatelessWidget {
                     title: Text('Health Calculator'),
                   ),
                   ListTile(
-                    onTap: () {
-                      Navigator.pushNamed(context, '/profile_screen');
-                    },
+                    onTap: () {},
                     leading: Icon(Icons.account_circle_rounded),
                     title: Text('My Profile'),
                   ),
@@ -120,22 +115,20 @@ class HomePageScreen extends StatelessWidget {
                                         width: 380.h,
                                         alignment: Alignment.center),
                                     Padding(
-                                      padding:  EdgeInsets.all(15.0),
+                                      padding: EdgeInsets.all(15.0),
                                       child: Container(
                                           height: 262.v,
                                           width: 301.h,
-
                                           child: Stack(
-                                              alignment:
-                                                  Alignment.centerLeft,
+                                              alignment: Alignment.centerLeft,
                                               children: [
                                                 CustomImageView(
                                                     imagePath: ImageConstant
                                                         .imgFreepikCharacter,
                                                     height: 235.v,
                                                     width: 97.h,
-                                                    alignment: Alignment
-                                                        .bottomRight,
+                                                    alignment:
+                                                        Alignment.bottomRight,
                                                     margin: EdgeInsets.only(
                                                         right: 4.h,
                                                         bottom: 19.v)),
@@ -144,8 +137,8 @@ class HomePageScreen extends StatelessWidget {
                                                         .imgFreepikCharacterGray400,
                                                     height: 262.v,
                                                     width: 232.h,
-                                                    alignment: Alignment
-                                                        .centerLeft)
+                                                    alignment:
+                                                        Alignment.centerLeft)
                                               ])),
                                     )
                                   ]))),
@@ -157,25 +150,21 @@ class HomePageScreen extends StatelessWidget {
                             margin: EdgeInsets.only(left: 34.h),
                             padding: EdgeInsets.symmetric(
                                 horizontal: 32.h, vertical: 19.v),
-                            decoration: AppDecoration.outlineBlack900
-                                .copyWith(
-                                    borderRadius:
-                                        BorderRadiusStyle.roundedBorder5),
+                            decoration: AppDecoration.outlineBlack900.copyWith(
+                                borderRadius: BorderRadiusStyle.roundedBorder5),
                             child: Column(
                                 mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   CustomImageView(
-                                      imagePath:
-                                          ImageConstant.imgFloatingIcon,
+                                      imagePath: ImageConstant.imgFloatingIcon,
                                       height: 44.v,
                                       width: 34.h,
                                       margin: EdgeInsets.only(left: 7.h)),
                                   SizedBox(height: 10.v),
                                   Text("Donate",
-                                      style: CustomTextStyles
-                                          .bodyMediumBlack900),
+                                      style:
+                                          CustomTextStyles.bodyMediumBlack900),
                                   SizedBox(height: 7.v)
                                 ])),
                       ),
@@ -186,14 +175,14 @@ class HomePageScreen extends StatelessWidget {
                                 onTapSixtySev(context);
                               },
                               child: Container(
-                                  margin: EdgeInsets.only(
-                                      left: 240.h, right: 30.h),
+                                  margin:
+                                      EdgeInsets.only(left: 240.h, right: 30.h),
                                   padding: EdgeInsets.only(
                                       top: 20.v, right: 28.h, bottom: 20.v),
                                   decoration: AppDecoration.outlineBlack900
                                       .copyWith(
-                                          borderRadius: BorderRadiusStyle
-                                              .roundedBorder5),
+                                          borderRadius:
+                                              BorderRadiusStyle.roundedBorder5),
                                   child: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       crossAxisAlignment:
@@ -254,7 +243,7 @@ class HomePageScreen extends StatelessWidget {
                       ]))),
           GestureDetector(
               onTap: () {
-                onTapSeventyOne(context);
+                Navigator.pushNamed(context, '/profile_screen');
               },
               child: Container(
                   padding:
@@ -272,7 +261,7 @@ class HomePageScreen extends StatelessWidget {
                             width: 47.h,
                             alignment: Alignment.centerRight),
                         SizedBox(height: 25.v),
-                        Text("History",
+                        Text("My Profile",
                             style: CustomTextStyles.bodyMediumGray900),
                         SizedBox(height: 2.v)
                       ])))
@@ -296,22 +285,27 @@ class HomePageScreen extends StatelessWidget {
                   children: [
                     SizedBox(height: 14.v),
                     Padding(
-                      padding:  EdgeInsets.only(left: 15.0),
+                      padding: EdgeInsets.only(left: 15.0),
                       child: CustomImageView(
                           imagePath: ImageConstant.imgLocation,
                           height: 43.v,
                           width: 28.h),
                     ),
                     SizedBox(height: 4.v),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 15.0),
-                      child: SizedBox(
-                          width: 60.h,
-                          child: Text("Plasma Donation Centres",
-                              maxLines: 3,
-                              overflow: TextOverflow.ellipsis,
-                              textAlign: TextAlign.center,
-                              style: CustomTextStyles.bodyMediumBlack900)),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(context, '/plasma_centre');
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 15.0),
+                        child: SizedBox(
+                            width: 60.h,
+                            child: Text("Plasma Donation Centres",
+                                maxLines: 3,
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.center,
+                                style: CustomTextStyles.bodyMediumBlack900)),
+                      ),
                     )
                   ])),
           GestureDetector(
@@ -320,8 +314,7 @@ class HomePageScreen extends StatelessWidget {
               },
               child: Container(
                   margin: EdgeInsets.only(left: 10.h),
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 9.h, vertical: 4.v),
+                  padding: EdgeInsets.symmetric(horizontal: 9.h, vertical: 4.v),
                   decoration: AppDecoration.outlineBlack900
                       .copyWith(borderRadius: BorderRadiusStyle.roundedBorder5),
                   child: Column(
@@ -371,9 +364,6 @@ class HomePageScreen extends StatelessWidget {
   }
 
   /// Navigates to the historyScreen when the action is triggered.
-  onTapSeventyOne(BuildContext context) {
-    Navigator.pushNamed(context, AppRoutes.historyScreen);
-  }
 
   /// Navigates to the donateScreen when the action is triggered.
   onTapSeventyTwo(BuildContext context) {

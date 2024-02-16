@@ -1,5 +1,6 @@
-import 'package:bdc/presentation/Customer%20Support/customer_support.dart';
+import 'package:bdc/presentation/Feedback/customer_support.dart';
 import 'package:bdc/presentation/health_calculator_screen/bmi_calc.dart';
+import 'package:bdc/presentation/requests_screen/reqverified.dart';
 import 'package:bdc/presentation/sign_up_screen/verification_screen.dart';
 import 'package:bdc/presentation/sign_up_screen/verified.dart';
 import 'package:bdc/presentation/rewards_screen/navigation.dart';
@@ -17,7 +18,7 @@ import 'package:bdc/presentation/st_step_of_new_password_screen/st_step_of_new_p
 import 'package:bdc/presentation/forgot_password_screen/forgot_password_screen.dart';
 import 'package:bdc/presentation/new_password_screen/new_password_screen.dart';
 import 'package:bdc/presentation/donor_list_screen/donor_list_screen.dart';
-import 'package:bdc/presentation/doc_request_one_screen/doc_request_one_screen.dart';
+import 'package:bdc/presentation/doc_request_one_screen/requestblood.dart';
 import 'package:bdc/presentation/home_page_screen/home_page_screen.dart';
 import 'package:bdc/presentation/donate_from_home_bottomsheet/donate_from_home_bottomsheet.dart';
 import 'package:bdc/presentation/rewards_screen/rewards_screen.dart';
@@ -26,21 +27,22 @@ import 'package:bdc/presentation/donor_detail_screen/donor_detail_screen.dart';
 import 'package:bdc/presentation/info_screen/info_screen.dart';
 import 'package:bdc/presentation/upload_profile_photo_two_screen/upload_profile_photo_two_screen.dart';
 import 'package:bdc/presentation/upload_profile_photo_screen/upload_profile_photo_screen.dart';
-import 'package:bdc/presentation/requests_screen/requests_screen.dart';
+import 'package:bdc/presentation/requests_screen/pendingrequests.dart';
 import 'package:bdc/presentation/doc_home_page_screen/doc_home_page_screen.dart';
-import 'package:bdc/presentation/history_screen/history_screen.dart';
 import 'package:bdc/presentation/app_navigation_screen/app_navigation_screen.dart';
 
 import '../presentation/maps/map.dart';
 
 class AppRoutes {
-  static const String donorsNearby='/donorsNearby';
+  static const String donorsNearby = '/donorsNearby';
 
-  static const String verificationScreen='/verification_screen';
+  static const String plasmaCentre = '/plasma_centre';
 
-  static const String verifiedScreen='/verified';
+  static const String verificationScreen = '/verification_screen';
 
-  static const String bmiCalculator='/bmi_calc';
+  static const String verifiedScreen = '/verified';
+
+  static const String bmiCalculator = '/bmi_calc';
 
   static const String welcomeScreen = '/welcome_screen';
 
@@ -89,6 +91,8 @@ class AppRoutes {
 
   static const String donorDetailScreen = '/donor_detail_screen';
 
+  static const String successfulReqVerified = '/suc_req_screen';
+
   static const String customerSupport = '/customer_support';
 
   static const String uploadProfilePhotoTwoScreen =
@@ -120,11 +124,12 @@ class AppRoutes {
     uploadDocumentScreen: (context) => UploadDocumentScreen(),
     uploadDocumentTwoScreen: (context) => UploadDocumentTwoScreen(),
     signUpScreen: (context) => SignUpScreen(),
-    verificationScreen:(context)=> VerificationScreen(),
-    verifiedScreen:(context)=>SuccessfulVerified(),
-    bmiCalculator:(context)=> BMICalculator(),
-    donorsNearby:(context)=>DonorsNearby(),
+    verificationScreen: (context) => VerificationScreen(),
+    verifiedScreen: (context) => SuccessfulVerified(),
+    bmiCalculator: (context) => BMICalculator(),
+    donorsNearby: (context) => DonorsNearby(),
     customerSupport: (context) => CustomerSupport(),
+    successfulReqVerified: (context) => SuccessfulReqVerified(),
     contactDonorScreen: (context) => ContactDonorScreen(),
     rewardsScreen: (context) => RewardsScreen(),
     appointmentPageThreeTabContainerScreen: (context) =>
@@ -142,7 +147,6 @@ class AppRoutes {
     uploadProfilePhotoScreen: (context) => UploadProfilePhotoScreen(),
     requestsScreen: (context) => RequestsScreen(),
     docHomePageScreen: (context) => DocHomePageScreen(),
-    historyScreen: (context) => HistoryScreen(),
     appNavigationScreen: (context) => AppNavigationScreen(),
     donateFromHomeBottomsheet: (context) => DonateFromHomeBottomsheet(),
   };

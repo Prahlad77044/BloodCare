@@ -2,10 +2,55 @@ import 'package:bdc/core/app_export.dart';
 import 'package:bdc/widgets/custom_elevated_button.dart';
 import 'package:bdc/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 // ignore_for_file: must_be_immutable
-class LogInScreen extends StatelessWidget {
+class LogInScreen extends StatefulWidget {
   LogInScreen({Key? key}) : super(key: key);
+
+  @override
+  State<LogInScreen> createState() => _LogInScreenState();
+}
+
+class _LogInScreenState extends State<LogInScreen> {
+  final FlutterSecureStorage secureStorage = FlutterSecureStorage();
+
+  Future<Map<String, dynamic>> loginUser() async {
+    final response =
+        await http.post(Uri.parse('http://192.168.1.2:4444/api/login/'),
+            headers: <String, String>{
+              'Content-Type': 'application/json',
+              // Add other headers if needed
+            },
+            body: jsonEncode(
+              {
+                'phone_number': phoneNumberController.text.toString(),
+                'password': passwordController.text.toString(),
+              },
+            ));
+    print('${response.body}');
+    print('${response.statusCode}');
+
+    if (response.statusCode == 200) {
+      // Successful login, parse the response
+      final Map<String, dynamic> data = json.decode(response.body);
+      Navigator.pushNamed(context, '/home_page_screen');
+      var accessToken = data['token']['access'];
+      var refreshToken = data['token']['refresh'];
+      await secureStorage.write(key: 'access_token', value: '$accessToken');
+      await secureStorage.write(key: 'refresh_token', value: '$refreshToken');
+
+      print('$refreshToken');
+      print('$accessToken');
+
+      return data;
+    } else {
+      // Handle login failure
+      throw Exception('error');
+    }
+  }
 
   final TextEditingController phoneNumberController = TextEditingController();
 
@@ -17,7 +62,7 @@ class LogInScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     mediaQueryData = MediaQuery.of(context);
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
+        debugShowCheckedModeBanner: false,
         home: Scaffold(
             resizeToAvoidBottomInset: false,
             body: Form(
@@ -57,15 +102,16 @@ class LogInScreen extends StatelessWidget {
                               obscureText: true,
                               contentPadding: EdgeInsets.symmetric(
                                   horizontal: 11.h, vertical: 21.v),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {}
+                              },
                               borderDecoration:
                                   TextFormFieldStyleHelper.outlineBlackTL25),
                           SizedBox(height: 19.v),
                           Align(
                               alignment: Alignment.centerRight,
                               child: GestureDetector(
-                                  onTap: () {
-                                    onTapTxtForgetPassword(context);
-                                  },
+                                  onTap: loginUser,
                                   child: Padding(
                                       padding: EdgeInsets.only(right: 15.h),
                                       child: Text("forget password",
@@ -79,7 +125,7 @@ class LogInScreen extends StatelessWidget {
                               buttonTextStyle:
                                   CustomTextStyles.titleSmallRobotoOnPrimary_1,
                               onPressed: () {
-                                onTapLogIn(context);
+                                loginUser();
                               }),
                           Spacer(),
                           SizedBox(height: 3.v),
@@ -112,9 +158,6 @@ class LogInScreen extends StatelessWidget {
   }
 
   /// Navigates to the homePageScreen when the action is triggered.
-  onTapLogIn(BuildContext context) {
-    Navigator.pushNamed(context, AppRoutes.homePageScreen);
-  }
 
   /// Navigates to the signUpScreen when the action is triggered.
   onTapTxtSignUp(BuildContext context) {

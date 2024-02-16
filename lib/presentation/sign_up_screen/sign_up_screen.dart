@@ -1,12 +1,11 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:bdc/core/app_export.dart';
 import 'package:bdc/widgets/custom_elevated_button.dart';
-import 'package:bdc/widgets/custom_outlined_button.dart';
 import 'package:bdc/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:bdc/widgets/custom_drop_down.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:flutter/cupertino.dart';
-import 'dart:io';
 
 // ignore_for_file: must_be_immutable
 class SignUpScreen extends StatefulWidget {
@@ -17,60 +16,50 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  File? _image;
-  final picker = ImagePicker();
-
-//Image Picker function to get image from gallery
-  Future getImageFromGallery() async {
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
-    setState(() {
-      if (pickedFile != null) {
-        _image = File(pickedFile.path);
-      }
-    });
-  }
-
-  Future showOptions() async {
-    showCupertinoModalPopup(
-      context: context,
-      builder: (context) => CupertinoActionSheet(
-        actions: [
-          CupertinoActionSheetAction(
-            child: Text('Photo Gallery'),
-            onPressed: () {
-              // close the options modal
-              Navigator.of(context).pop();
-              // get image from gallery
-              getImageFromGallery();
+  Future<Map<String, dynamic>> signupUser() async {
+    final response =
+        await http.post(Uri.parse('http://10.10.10.55:4444/api/register/'),
+            headers: <String, String>{
+              'Content-Type': 'application/json',
+              // Add other headers if needed
             },
-          ),
-          CupertinoActionSheetAction(
-            child: Text('Camera'),
-            onPressed: () {
-              // close the options modal
-              Navigator.of(context).pop();
-              // get image from camera
-              getImageFromCamera();
-            },
-          ),
-        ],
-      ),
-    );
+            body: jsonEncode(
+              {
+                'phone_number': phoneNumberController.text.toString(),
+                'password': passwordController.text.toString(),
+                'name': nameController.text.toString(),
+                'email': emailController.text.toString(),
+                'date_of_birth': dateOfBirthController.text.toString(),
+                'bloodgroup': bloodgrp.toString(),
+                'province_number': provinceNumberController.text.toString(),
+                'address': addressController.text.toString(),
+                'issue': issueController.text.toString(),
+                // 'latitude': latController.text.toString(),
+                // 'longitude': longController.text.toString(),
+                //'profimg':_image1.toString(),
+                //'docimg':_image2,
+              },
+            ));
+    print('${response.body}');
+    print('${response.statusCode}');
+    // final storage = new FlutterSecureStorage();
+
+    if (response.statusCode == 201) {
+      // Successful login, parse the response
+      final Map<String, dynamic> data = json.decode(response.body);
+      var token = data['token']['access'];
+      print("$token");
+
+      // await storage.write(key: data['key'], value: data['value']);
+      Navigator.pushNamed(context, '/verified');
+
+      return data;
+    } else {
+      // Handle login failure
+      throw Exception('Failed to login');
+    }
   }
 
-//Image Picker function to get image from camera
-  Future getImageFromCamera() async {
-    final pickedFile = await picker.pickImage(source: ImageSource.camera);
-
-    setState(() {
-      if (pickedFile != null) {
-        _image = File(pickedFile.path);
-      } else {
-        print('User didnt pick any image.');
-      }
-    });
-  }
   List<String> dropdownItemList2 = [
     "A+",
     "A-",
@@ -83,6 +72,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   ];
 
   TextEditingController nameController = TextEditingController();
+  // TextEditingController latController = TextEditingController();
+  // TextEditingController longController = TextEditingController();
 
   TextEditingController emailController = TextEditingController();
 
@@ -97,6 +88,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController addressController = TextEditingController();
 
   TextEditingController issueController = TextEditingController();
+  var bloodgrp;
 
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -144,24 +136,32 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                             height: 9.v, width: 18.h)),
                                     hintText: "Blood Group",
                                     items: dropdownItemList2,
-                                    onChanged: (value) {})),
+                                    onChanged: (value) {
+                                      bloodgrp = value;
+                                    })),
                             SizedBox(
                               height: 13,
                             ),
                             _buildProvinceNumber(context),
                             SizedBox(height: 13.v),
                             _buildAddress(context),
+                            // SizedBox(height: 13.v),
+                            // _buildLatitude(context),
+                            // SizedBox(height: 13.v),
+                            // _buildLongitude(context),
                             SizedBox(height: 18.v),
                             Text("Any medical issue? If any State below.",
                                 style: CustomTextStyles.bodyMediumPrimary_1),
                             SizedBox(height: 13.v),
                             _buildIssue(context),
-                            SizedBox(height: 13.v),
-                            _buildBROWSE1(context),
-                            SizedBox(height: 35.v),
-                            _buildBROWSE3(context),
                             SizedBox(height: 26.v),
-                            _buildSignUp(context),
+                            CustomElevatedButton(
+                                onPressed: signupUser,
+                                text: "Sign Up",
+                                margin: EdgeInsets.only(left: 7.h),
+                                buttonStyle: CustomButtonStyles.fillPrimaryTL10,
+                                buttonTextStyle: CustomTextStyles
+                                    .titleSmallRobotoOnPrimary_1),
                             SizedBox(height: 37.v),
                             Padding(
                                 padding:
@@ -193,6 +193,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
             CustomTextFormField(controller: nameController, hintText: "Name"));
   }
 
+  // Widget _buildLatitude(BuildContext context) {
+  //   return Padding(
+  //       padding: EdgeInsets.only(right: 7.h),
+  //       child: CustomTextFormField(
+  //           textInputType: TextInputType.number,
+  //           controller: latController,
+  //           hintText: "Latitude(Optional)"));
+  // }
+
+  // Widget _buildLongitude(BuildContext context) {
+  //   return Padding(
+  //       padding: EdgeInsets.only(right: 7.h),
+  //       child: CustomTextFormField(
+  //           textInputType: TextInputType.number,
+  //           controller: latController,
+  //           hintText: "Longitude(Optional)"));
+  // }
+
   /// Section Widget
   Widget _buildEmail(BuildContext context) {
     return Padding(
@@ -205,13 +223,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   /// Section Widget
   Widget _buildPassword(BuildContext context) {
+    // bool _editable = false;
     return Padding(
         padding: EdgeInsets.only(right: 7.h),
         child: CustomTextFormField(
-            controller: passwordController,
-            hintText: "Password",
-            textInputType: TextInputType.visiblePassword,
-            obscureText: true));
+          controller: passwordController,
+          hintText: "Password",
+          textInputType: TextInputType.visiblePassword,
+          obscureText: true,
+          // suffix: IconButton(
+          //   icon: Icon(Icons.remove_red_eye),
+          //   onPressed: () {},
+          // ),
+        ));
   }
 
   /// Section Widget
@@ -268,81 +292,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
             textInputAction: TextInputAction.done,
             borderDecoration: TextFormFieldStyleHelper.outlineBlackTL25));
   }
+}
 
-  /// Section Widget
-  Widget _buildBROWSE(BuildContext context) {
-    return CustomOutlinedButton(
-      onPressed: showOptions,
-        height: 39.v,
-        width: 148.h,
-        text: "BROWSE",
-        buttonStyle: CustomButtonStyles.outlineBlack,
-        buttonTextStyle: CustomTextStyles.titleSmallOnPrimary);
-  }
-
-  /// Section Widget
-  Widget _buildBROWSE1(BuildContext context) {
-    return Padding(
-        padding: EdgeInsets.only(left: 7.h, right: 13.h),
-        child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                  padding: EdgeInsets.only(top: 8.v, bottom: 12.v),
-                  child: Text("Upload Profile Photo",
-                      style: CustomTextStyles.titleSmallPrimary)),
-              _buildBROWSE(context)
-            ]));
-  }
-
-  /// Section Widget
-  Widget _buildBROWSE2(BuildContext context) {
-    return CustomOutlinedButton(
-        onPressed: showOptions,
-        height: 39.v,
-        width: 148.h,
-        text: "BROWSE",
-        margin: EdgeInsets.only(left: 17.h, top: 2.v),
-        buttonStyle: CustomButtonStyles.outlineBlack,
-        buttonTextStyle: CustomTextStyles.titleSmallOnPrimary);
-  }
-
-  /// Section Widget
-  Widget _buildBROWSE3(BuildContext context) {
-    return Padding(
-        padding: EdgeInsets.only(left: 7.h, right: 13.h),
-        child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                  width: 150.h,
-                  margin: EdgeInsets.only(bottom: 6.v),
-                  child: Text("Upload Photo of the document",
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: CustomTextStyles.titleSmallPrimary)),
-              _buildBROWSE2(context)
-            ]));
-  }
-
-  /// Section Widget
-  Widget _buildSignUp(BuildContext context) {
-    return CustomElevatedButton(
-        onPressed: () {
-          Navigator.pushNamed(context, '/verification_screen');
-        },
-        text: "Sign Up",
-        margin: EdgeInsets.only(left: 7.h),
-        buttonStyle: CustomButtonStyles.fillPrimaryTL10,
-        buttonTextStyle: CustomTextStyles.titleSmallRobotoOnPrimary_1);
-  }
-
-  /// Navigates to the bloodTypeSelectScreen when the action is triggered.
-
-  /// Navigates to the logInScreen when the action is triggered.
-  onTapTxtLogIn(BuildContext context) {
-    Navigator.pushNamed(context, AppRoutes.logInScreen);
-  }
+/// Navigates to the logInScreen when the action is triggered.
+onTapTxtLogIn(BuildContext context) {
+  Navigator.pushNamed(context, AppRoutes.logInScreen);
 }

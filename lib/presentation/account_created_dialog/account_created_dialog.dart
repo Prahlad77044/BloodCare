@@ -63,7 +63,7 @@ class AccountCreatedDialog extends StatelessWidget {
               width: 128.h,
               margin: EdgeInsets.only(left: 10.h),
               child: Text(
-                "Account  created        successfully",
+                "Account  created successfully",
                 maxLines: 3,
                 overflow: TextOverflow.ellipsis,
                 style: CustomTextStyles.titleLargeBluegray900,

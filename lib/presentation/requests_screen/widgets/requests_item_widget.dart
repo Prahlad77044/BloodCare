@@ -1,17 +1,60 @@
+import 'dart:convert';
+
 import 'package:bdc/core/app_export.dart';
 import 'package:bdc/widgets/custom_elevated_button.dart';
 import 'package:bdc/widgets/custom_outlined_button.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 // ignore: must_be_immutable
-class RequestsItemWidget extends StatelessWidget {
+class RequestsItemWidget extends StatefulWidget {
   const RequestsItemWidget({Key? key})
       : super(
           key: key,
         );
 
   @override
+  State<RequestsItemWidget> createState() => _RequestsItemWidgetState();
+}
+
+class _RequestsItemWidgetState extends State<RequestsItemWidget> {
+  Future<List<dynamic>> getRequest() async {
+    String url = "http://192.168.1.2:4444/api/blood-req_lst/";
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        var responseData = jsonDecode(response.body);
+        // if responseData is a Map, wrap it in a list
+        if (responseData is Map) {
+          return [responseData];
+        } else {
+          return responseData;
+        }
+      } else {
+        print('The response is not JSON.');
+        return []; // return an empty list if the response is not JSON
+      }
+    } catch (e) {
+      print('Caught error: $e');
+      return []; // return an empty list if an error occurs
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    // return FutureBuilder(
+    //     future: getRequest(),
+    //     builder: (context, snapshot) {
+    //       if (snapshot.data == null) {
+    //         return Container(
+    //           child: Center(
+    //             child: CircularProgressIndicator.adaptive(),
+    //           ),
+    //         );
+    //       }
+    //       final data = snapshot.data as List;
+    //       var name = data[0]['name'];
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: 19.h,
@@ -35,7 +78,7 @@ class RequestsItemWidget extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.only(left: 15.h),
                 child: Text(
-                  "Dr. Will Tunde",
+                  "Dr.Will Tunde",
                   style: theme.textTheme.titleMedium,
                 ),
               ),

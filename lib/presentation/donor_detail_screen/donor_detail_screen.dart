@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:bdc/core/app_export.dart';
 import 'package:bdc/widgets/custom_checkbox_button.dart';
 import 'package:bdc/widgets/custom_drop_down.dart';
 import 'package:bdc/widgets/custom_elevated_button.dart';
 import 'package:bdc/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart' as http;
 
 // ignore_for_file: must_be_immutable
 class DonorDetailScreen extends StatefulWidget {
@@ -20,12 +24,149 @@ class _DonorDetailScreenState extends State<DonorDetailScreen> {
 
   TextEditingController districtController = TextEditingController();
 
-  List<String> dropdownItemList = ["Province No. 1", "Madhesh Pradesh", "Bagmati Pradesh","Gandaki Pradesh","Lumbini Pradesh","Karnali Pradesh","Sudurpaschim Pradesh"];
+  List<String> dropdownItemList = [
+    "Province No. 1",
+    "Madhesh Pradesh",
+    "Bagmati Pradesh",
+    "Gandaki Pradesh",
+    "Lumbini Pradesh",
+    "Karnali Pradesh",
+    "Sudurpaschim Pradesh"
+  ];
 
   TextEditingController cityController = TextEditingController();
 
-  List<String> dropdownItemList1=["Achham", "Arghakhanchi", "Baglung", "Baitadi", "Bajhang", "Bajura", "Banke", "Bara", "Bardiya", "Bhaktapur", "Bhojpur", "Chitwan", "Dadeldhura", "Dailekh", "Dang", "Darchula", "Dhading", "Dhankuta", "Dhanusha", "Dolkha", "Dolpa", "Doti", "Gorkha", "Gulmi", "Humla", "Ilam", "Jajarkot", "Jhapa", "Jumla", "Kailali", "Kalikot", "Kanchanpur", "Kapilvastu", "Kaski", "Kathmandu", "Kavrepalanchok", "Khotang", "Lalitpur", "Lamjung", "Mahottari", "Makwanpur", "Manang", "Morang", "Mugu", "Mustang", "Myagdi", "Nawalparasi East", "Nawalparasi West", "Nuwakot", "Okhaldhunga", "Palpa", "Panchthar", "Parbat", "Parsa", "Pyuthan", "Ramechhap", "Rasuwa", "Rautahat", "Rolpa", "Rukum (Eastern)", "Rukum (Western)", "Rupandehi", "Salyan", "Sankhuwasabha", "Saptari", "Sarlahi", "Sindhuli", "Sindhupalchok", "Siraha", "Solukhumbu", "Sunsari", "Surkhet", "Syangja", "Tanahun", "Taplejung", "Terhathum", "Udayapur"];
+  List<String> dropdownItemList1 = [
+    "Achham",
+    "Arghakhanchi",
+    "Baglung",
+    "Baitadi",
+    "Bajhang",
+    "Bajura",
+    "Banke",
+    "Bara",
+    "Bardiya",
+    "Bhaktapur",
+    "Bhojpur",
+    "Chitwan",
+    "Dadeldhura",
+    "Dailekh",
+    "Dang",
+    "Darchula",
+    "Dhading",
+    "Dhankuta",
+    "Dhanusha",
+    "Dolkha",
+    "Dolpa",
+    "Doti",
+    "Gorkha",
+    "Gulmi",
+    "Humla",
+    "Ilam",
+    "Jajarkot",
+    "Jhapa",
+    "Jumla",
+    "Kailali",
+    "Kalikot",
+    "Kanchanpur",
+    "Kapilvastu",
+    "Kaski",
+    "Kathmandu",
+    "Kavrepalanchok",
+    "Khotang",
+    "Lalitpur",
+    "Lamjung",
+    "Mahottari",
+    "Makwanpur",
+    "Manang",
+    "Morang",
+    "Mugu",
+    "Mustang",
+    "Myagdi",
+    "Nawalparasi East",
+    "Nawalparasi West",
+    "Nuwakot",
+    "Okhaldhunga",
+    "Palpa",
+    "Panchthar",
+    "Parbat",
+    "Parsa",
+    "Pyuthan",
+    "Ramechhap",
+    "Rasuwa",
+    "Rautahat",
+    "Rolpa",
+    "Rukum (Eastern)",
+    "Rukum (Western)",
+    "Rupandehi",
+    "Salyan",
+    "Sankhuwasabha",
+    "Saptari",
+    "Sarlahi",
+    "Sindhuli",
+    "Sindhupalchok",
+    "Siraha",
+    "Solukhumbu",
+    "Sunsari",
+    "Surkhet",
+    "Syangja",
+    "Tanahun",
+    "Taplejung",
+    "Terhathum",
+    "Udayapur"
+  ];
+  List<String> dropdownItemList2 = [
+    "A+",
+    "A-",
+    "B+",
+    "B-",
+    "AB+",
+    "AB-",
+    "O+",
+    "O-"
+  ];
+  final FlutterSecureStorage secureStorage = FlutterSecureStorage();
 
+  Future detailsSubmit() async {
+    var url = 'http://192.168.1.2:4444/bloodcare/donors/';
+    String? accessToken = await secureStorage.read(key: 'access_token');
+    String? refreshToken = await secureStorage.read(key: 'refresh_token');
+    print('button pressed');
+    print('$accessToken');
+    print('$bloodgrp');
+    print('$district');
+    print('$prov');
+    var response = await http.post(
+      Uri.parse(url),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $accessToken',
+      },
+      body: jsonEncode({
+        'name': nameController.text.toString(),
+        'Email': emailController.text.toString(),
+        'phoneno': phoneNumberController.text.toString(),
+        'confirm': bySubmittingtheformIherebydecl.toString(),
+        'prov_no': prov.toString(),
+        'bloodgrp': bloodgrp.toString(),
+        'city': cityController.text.toString(),
+        'district': district.toString(),
+        'dob': dateOfBirthController.text.toString(),
+        'gender': genderController.text.toString()
+      }),
+    );
+    if (response.statusCode == 201) {
+      print('post successful');
+    } else {
+      print('${response.statusCode}');
+    }
+    print("${response.body}");
+    return response.body;
+  }
+
+  var bloodgrp;
+  var prov;
+  var district;
   TextEditingController dateOfBirthController = TextEditingController();
 
   TextEditingController emailController = TextEditingController();
@@ -51,13 +192,13 @@ class _DonorDetailScreenState extends State<DonorDetailScreen> {
                 key: _formKey,
                 child: SingleChildScrollView(
                     child: Padding(
-                        padding: EdgeInsets.only(
-                            left: 22.h, right: 15.h, bottom: 50.v),
+                        padding:
+                            EdgeInsets.only(left: 22, right: 15, bottom: 50),
                         child: Column(children: [
                           Align(
                               alignment: Alignment.centerLeft,
                               child: Padding(
-                                  padding: EdgeInsets.only(left: 11.h,top: 10),
+                                  padding: EdgeInsets.only(left: 11.h, top: 13),
                                   child: Text("Please enter your full detail",
                                       style:
                                           CustomTextStyles.bodyMediumGray900))),
@@ -70,6 +211,32 @@ class _DonorDetailScreenState extends State<DonorDetailScreen> {
                           SizedBox(height: 17.v),
                           _buildCity(context),
                           SizedBox(height: 17.v),
+                          Padding(
+                              padding: EdgeInsets.only(left: 2, right: 2),
+                              child: CustomDropDown(
+                                autofocus: false,
+                                icon: Container(
+                                    margin: EdgeInsets.symmetric(
+                                        horizontal: 30.h, vertical: 16.v),
+                                    child: CustomImageView(
+                                        imagePath: ImageConstant.imgArrowDown,
+                                        height: 9.v,
+                                        width: 18.h)),
+                                hintText: "Blood Group",
+                                items: dropdownItemList2,
+                                onChanged: (value) {
+                                  bloodgrp = value;
+                                },
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please select a blood group';
+                                  }
+                                  return null;
+                                },
+                              )),
+                          SizedBox(
+                            height: 17,
+                          ),
                           _buildDateOfBirth(context),
                           SizedBox(height: 17.v),
                           _buildEmail(context),
@@ -86,85 +253,110 @@ class _DonorDetailScreenState extends State<DonorDetailScreen> {
 
   /// Section Widget
   Widget _buildName(BuildContext context) {
-    return CustomTextFormField(
+    return Padding(
+      padding: const EdgeInsets.only(left: 2.0, right: 2.0),
+      child: CustomTextFormField(
+        contentPadding: EdgeInsets.all(14),
         controller: nameController,
         textInputType: TextInputType.name,
         hintText: "Name",
-        );
+      ),
+    );
   }
 
   /// Section Widget
   Widget _buildProvinceNumber(BuildContext context) {
     return Padding(
-        padding: EdgeInsets.only(
-            left: 2.h, right: 4.h),
+        padding: EdgeInsets.only(left: 2, right: 2),
         child: CustomDropDown(
-            autofocus: false,
-            hintText: "Province",
-            items: dropdownItemList,
-            onChanged: (value) {}));
+          contentPadding: EdgeInsets.all(12),
+          autofocus: false,
+          hintText: "Province",
+          items: dropdownItemList,
+          onChanged: (value) {
+            prov = value;
+          },
+        ));
   }
 
   /// Section Widget
   Widget _buildDistrict(BuildContext context) {
-    return  Padding(
-        padding: EdgeInsets.only(
-            left: 2.h, right: 4.h),
+    return Padding(
+        padding: EdgeInsets.only(left: 2, right: 2),
         child: CustomDropDown(
+            contentPadding: EdgeInsets.all(12),
             hintText: "District",
+            textStyle:
+                TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),
             autofocus: false,
             items: dropdownItemList1,
-            onChanged: (value) {}));
+            onChanged: (value) {
+              district = value;
+            }));
   }
 
   /// Section Widget
 
   /// Section Widget
   Widget _buildCity(BuildContext context) {
-    return CustomTextFormField(
-
+    return Padding(
+      padding: const EdgeInsets.only(left: 2.0, right: 2),
+      child: CustomTextFormField(
+        contentPadding: EdgeInsets.all(14),
         controller: cityController,
         hintText: "City",
         hintStyle: CustomTextStyles.bodySmallGray500_1,
-        );
+      ),
+    );
   }
-
-
 
   /// Section Widget
   Widget _buildDateOfBirth(BuildContext context) {
-    return CustomTextFormField(
-        controller: dateOfBirthController,
-        hintText: "Date of Birth (YY-MM-DD)",
-        textInputType: TextInputType.datetime,
-        hintStyle: CustomTextStyles.bodySmallGray500_1,
-        contentPadding: EdgeInsets.symmetric(horizontal: 12.h, vertical: 13.v));
+    return Padding(
+      padding: const EdgeInsets.only(left: 2.0, right: 2),
+      child: CustomTextFormField(
+          controller: dateOfBirthController,
+          hintText: "Date of Birth (YY-MM-DD)",
+          textInputType: TextInputType.datetime,
+          hintStyle: CustomTextStyles.bodySmallGray500_1,
+          contentPadding: EdgeInsets.all(14)),
+    );
   }
 
   /// Section Widget
   Widget _buildEmail(BuildContext context) {
-    return CustomTextFormField(
-        controller: emailController,
-        hintText: "Email",
-        textInputType: TextInputType.emailAddress);
+    return Padding(
+      padding: const EdgeInsets.only(left: 2.0, right: 2.0),
+      child: CustomTextFormField(
+          contentPadding: EdgeInsets.all(14),
+          controller: emailController,
+          hintText: "Email",
+          textInputType: TextInputType.emailAddress),
+    );
   }
 
   /// Section Widget
   Widget _buildGender(BuildContext context) {
-    return CustomTextFormField(
-        controller: genderController,
-        hintText: "Gender",
-
-        contentPadding: EdgeInsets.symmetric(horizontal: 13.h, vertical: 13.v));
+    return Padding(
+      padding: const EdgeInsets.only(left: 2.0, right: 2),
+      child: CustomTextFormField(
+          controller: genderController,
+          hintText: "Gender",
+          contentPadding: EdgeInsets.all(14)),
+    );
   }
 
   /// Section Widget
   Widget _buildPhoneNumber(BuildContext context) {
-    return CustomTextFormField(
-        controller: phoneNumberController,
-        hintText: "Phone Number",
-        textInputAction: TextInputAction.done,
-        textInputType: TextInputType.phone);
+    return Padding(
+      padding: const EdgeInsets.only(left: 2.0, right: 2),
+      child: CustomTextFormField(
+          contentPadding: EdgeInsets.all(14),
+          controller: phoneNumberController,
+          hintText: "Phone Number",
+          textInputAction: TextInputAction.done,
+          textInputType: TextInputType.phone),
+    );
   }
 
   /// Section Widget
@@ -173,20 +365,20 @@ class _DonorDetailScreenState extends State<DonorDetailScreen> {
         padding: EdgeInsets.symmetric(horizontal: 11.h),
         child: CustomCheckboxButton(
             text:
-                "By Submitting the form I hereby declare that I am 18 or above years old and wish to donate blood when needed.",
+                "By submitting the form, I hereby declare that I am 18 years or above, I am in good health, and I wish to donate blood when needed.",
             isExpandedText: true,
-
             value: bySubmittingtheformIherebydecl,
             onChange: (value) {
-             setState(() {
-               bySubmittingtheformIherebydecl =value ;
-             });
+              setState(() {
+                bySubmittingtheformIherebydecl = value;
+              });
             }));
   }
 
   /// Section Widget
   Widget _buildSubmit(BuildContext context) {
     return CustomElevatedButton(
+        onPressed: detailsSubmit,
         text: "Submit",
         buttonStyle: CustomButtonStyles.fillPrimaryTL10,
         buttonTextStyle: CustomTextStyles.titleSmallOnPrimary_1);
