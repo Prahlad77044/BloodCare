@@ -247,7 +247,7 @@ class HomePageScreen extends StatelessWidget {
               },
               child: Container(
                   padding:
-                      EdgeInsets.symmetric(horizontal: 29.h, vertical: 13.v),
+                      EdgeInsets.symmetric(horizontal: 22.h, vertical: 13.v),
                   decoration: AppDecoration.outlineBlack900
                       .copyWith(borderRadius: BorderRadiusStyle.roundedBorder5),
                   child: Column(
@@ -255,12 +255,12 @@ class HomePageScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         SizedBox(height: 5.v),
-                        CustomImageView(
-                            imagePath: ImageConstant.imgClock,
-                            height: 45.v,
-                            width: 47.h,
-                            alignment: Alignment.centerRight),
-                        SizedBox(height: 25.v),
+                        Icon(
+                          Icons.account_circle_sharp,
+                          color: Colors.red[800],
+                          size: 55,
+                        ),
+                        SizedBox(height: 15.v),
                         Text("My Profile",
                             style: CustomTextStyles.bodyMediumGray900),
                         SizedBox(height: 2.v)
@@ -293,9 +293,7 @@ class HomePageScreen extends StatelessWidget {
                     ),
                     SizedBox(height: 4.v),
                     GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamed(context, '/plasma_centre');
-                      },
+                      onTap: () {},
                       child: Padding(
                         padding: const EdgeInsets.only(left: 15.0),
                         child: SizedBox(

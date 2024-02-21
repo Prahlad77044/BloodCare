@@ -57,6 +57,7 @@ class _LogInScreenState extends State<LogInScreen> {
   final TextEditingController passwordController = TextEditingController();
 
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool obscure = false;
 
   @override
   Widget build(BuildContext context) {
@@ -86,6 +87,10 @@ class _LogInScreenState extends State<LogInScreen> {
                           CustomTextFormField(
                               controller: phoneNumberController,
                               hintText: "Phone Number",
+                              textStyle: TextStyle(
+                                fontSize: 16,
+                                color: Colors.black,
+                              ),
                               autofocus: false,
                               textInputType: TextInputType.phone,
                               contentPadding: EdgeInsets.symmetric(
@@ -97,9 +102,20 @@ class _LogInScreenState extends State<LogInScreen> {
                               controller: passwordController,
                               hintText: "Password",
                               autofocus: false,
+                              textStyle: TextStyle(
+                                fontSize: 10,
+                                color: Colors.black,
+                              ),
                               textInputAction: TextInputAction.done,
                               textInputType: TextInputType.visiblePassword,
-                              obscureText: true,
+                              obscureText: !obscure,
+                              suffix: IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      obscure = !obscure;
+                                    });
+                                  },
+                                  icon: Icon(Icons.remove_red_eye)),
                               contentPadding: EdgeInsets.symmetric(
                                   horizontal: 11.h, vertical: 21.v),
                               validator: (value) {

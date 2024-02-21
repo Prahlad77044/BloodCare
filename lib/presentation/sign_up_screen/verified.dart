@@ -70,6 +70,33 @@ class SuccessfulVerified extends StatelessWidget {
                 ),
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.only(top: 20.0, left: 50),
+              child: GestureDetector(
+                onTap: (() {
+                  Navigator.pushNamed(context, '/log_in_screen');
+                }),
+                child: Container(
+                  child: Row(
+                    children: [
+                      Icon(
+                        size: 50,
+                        Icons.arrow_back,
+                        color: Colors.red[800],
+                      ),
+                      Text(
+                        'Login',
+                        style: TextStyle(
+                            fontSize: 30,
+                            color: Colors.red[800],
+                            decoration: TextDecoration.underline,
+                            fontWeight: FontWeight.w100),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            )
           ],
         ),
       ),

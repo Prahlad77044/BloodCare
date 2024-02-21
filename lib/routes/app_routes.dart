@@ -20,7 +20,7 @@ import 'package:bdc/presentation/new_password_screen/new_password_screen.dart';
 import 'package:bdc/presentation/donor_list_screen/donor_list_screen.dart';
 import 'package:bdc/presentation/doc_request_one_screen/requestblood.dart';
 import 'package:bdc/presentation/home_page_screen/home_page_screen.dart';
-import 'package:bdc/presentation/donate_from_home_bottomsheet/donate_from_home_bottomsheet.dart';
+import 'package:bdc/presentation/donate_from_home_bottomsheet/optionsdonate.dart';
 import 'package:bdc/presentation/rewards_screen/rewards_screen.dart';
 import 'package:bdc/presentation/profile_screen/profile_screen.dart';
 import 'package:bdc/presentation/donor_detail_screen/donor_detail_screen.dart';
@@ -31,6 +31,7 @@ import 'package:bdc/presentation/doc_home_page_screen/doc_home_page_screen.dart'
 import 'package:bdc/presentation/app_navigation_screen/app_navigation_screen.dart';
 
 import '../presentation/maps/map.dart';
+import '../presentation/requests_screen/widgets/requests screen.dart';
 
 class AppRoutes {
   static const String donorsNearby = '/donorsNearby';
@@ -140,6 +141,7 @@ class AppRoutes {
     newPasswordScreen: (context) => NewPasswordScreen(),
     donorListScreen: (context) => DonorListScreen(),
     docRequestOneScreen: (context) => DocRequestOneScreen(),
+    requestsScreen: (context) => RequestsWidget(),
     homePageScreen: (context) => HomePageScreen(),
     donorDetailScreen: (context) => DonorDetailScreen(),
     uploadProfilePhotoTwoScreen: (context) => UploadProfilePhotoTwoScreen(),

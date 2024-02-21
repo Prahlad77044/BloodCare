@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-
-
-
-
 class InfoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Information'),
+        title: Text(
+          'Information',
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.red[800],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -43,10 +43,7 @@ class InfoScreen extends StatelessWidget {
         title,
         textAlign: TextAlign.start,
         style: TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-          color: Colors.red[800]
-        ),
+            fontSize: 20, fontWeight: FontWeight.bold, color: Colors.red[800]),
       ),
     );
   }

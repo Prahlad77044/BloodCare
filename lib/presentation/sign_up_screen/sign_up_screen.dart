@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:bdc/core/app_export.dart';
 import 'package:bdc/widgets/custom_elevated_button.dart';
 import 'package:bdc/widgets/custom_text_form_field.dart';
@@ -18,7 +17,7 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   Future<Map<String, dynamic>> signupUser() async {
     final response =
-        await http.post(Uri.parse('http://10.10.10.55:4444/api/register/'),
+        await http.post(Uri.parse('http://192.168.1.2:4444/api/register/'),
             headers: <String, String>{
               'Content-Type': 'application/json',
               // Add other headers if needed
@@ -135,6 +134,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                         child: CustomImageView(
                                             height: 9.v, width: 18.h)),
                                     hintText: "Blood Group",
+                                    autofocus: false,
                                     items: dropdownItemList2,
                                     onChanged: (value) {
                                       bloodgrp = value;
@@ -288,7 +288,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         padding: EdgeInsets.only(right: 7.h),
         child: CustomTextFormField(
             controller: issueController,
-            hintText: "Issue",
+            hintText: "Issue(Optional)",
             textInputAction: TextInputAction.done,
             borderDecoration: TextFormFieldStyleHelper.outlineBlackTL25));
   }

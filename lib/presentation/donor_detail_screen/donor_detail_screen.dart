@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:bdc/core/app_export.dart';
 import 'package:bdc/widgets/custom_checkbox_button.dart';
 import 'package:bdc/widgets/custom_drop_down.dart';
@@ -136,6 +135,7 @@ class _DonorDetailScreenState extends State<DonorDetailScreen> {
     print('$bloodgrp');
     print('$district');
     print('$prov');
+    print('$bySubmittingtheformIherebydecl');
     var response = await http.post(
       Uri.parse(url),
       headers: <String, String>{
@@ -144,7 +144,6 @@ class _DonorDetailScreenState extends State<DonorDetailScreen> {
       },
       body: jsonEncode({
         'name': nameController.text.toString(),
-        'Email': emailController.text.toString(),
         'phoneno': phoneNumberController.text.toString(),
         'confirm': bySubmittingtheformIherebydecl.toString(),
         'prov_no': prov.toString(),
@@ -152,7 +151,7 @@ class _DonorDetailScreenState extends State<DonorDetailScreen> {
         'city': cityController.text.toString(),
         'district': district.toString(),
         'dob': dateOfBirthController.text.toString(),
-        'gender': genderController.text.toString()
+        'gender': genderController.text
       }),
     );
     if (response.statusCode == 201) {
@@ -186,7 +185,11 @@ class _DonorDetailScreenState extends State<DonorDetailScreen> {
         child: Scaffold(
             resizeToAvoidBottomInset: false,
             appBar: AppBar(
-              title: Text('Details'),
+              title: Text(
+                'Details',
+                style: TextStyle(color: Colors.white),
+              ),
+              backgroundColor: Colors.red[800],
             ),
             body: Form(
                 key: _formKey,
@@ -227,19 +230,11 @@ class _DonorDetailScreenState extends State<DonorDetailScreen> {
                                 onChanged: (value) {
                                   bloodgrp = value;
                                 },
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Please select a blood group';
-                                  }
-                                  return null;
-                                },
                               )),
                           SizedBox(
                             height: 17,
                           ),
                           _buildDateOfBirth(context),
-                          SizedBox(height: 17.v),
-                          _buildEmail(context),
                           SizedBox(height: 17.v),
                           _buildGender(context),
                           SizedBox(height: 17.v),

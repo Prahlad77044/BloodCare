@@ -76,7 +76,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       backgroundColor: Colors.red[50],
       appBar: AppBar(
-        title: Text('My Profile'),
+        backgroundColor: Colors.red[800],
+        title: Text(
+          'My Profile',
+          style: TextStyle(color: Colors.white),
+        ),
         elevation: 0,
         actions: [
           IconButton(
@@ -386,7 +390,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 _editable = false;
                               });
                             },
-                            child: Text('Save')),
+                            child: Text(
+                              'Save',
+                              style: TextStyle(color: Colors.white),
+                            )),
                       ),
                     )
                   ],

@@ -55,6 +55,7 @@ class _DocRequestOneScreenState extends State<DocRequestOneScreen> {
     );
     if (response.statusCode == 201) {
       final Map<String, dynamic> data = json.decode(response.body);
+      Navigator.pushNamed(context, '/suc_req_screen');
 
       // Navigator.pushNamed(context as BuildContext, '/home_page_screen');
       return ("${response.statusCode}");
@@ -193,114 +194,130 @@ class _DocRequestOneScreenState extends State<DocRequestOneScreen> {
             appBar: AppBar(
               title: Text('Request for Blood'),
             ),
-            body: Form(
-                key: _formKey,
-                child: SingleChildScrollView(
-                    child: SizedBox(
-                        child:
-                            Stack(alignment: Alignment.bottomCenter, children: [
-                  Align(
-                      alignment: Alignment.center,
-                      child: Container(
-                          decoration:
-                              BoxDecoration(color: theme.colorScheme.primary))),
-                  Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 17.h, vertical: 29.v),
-                          child:
-                              Column(mainAxisSize: MainAxisSize.min, children: [
-                            _buildName(context),
-                            SizedBox(height: 19.v),
-                            _buildContactPerson(context),
-                            SizedBox(height: 19.v),
-                            Padding(
-                                padding: EdgeInsets.only(left: 5.h, right: 4.h),
-                                child: CustomDropDown(
-                                  autofocus: false,
-                                  icon: Container(
-                                      margin: EdgeInsets.symmetric(
-                                          horizontal: 30.h, vertical: 16.v),
-                                      child: CustomImageView(
-                                          imagePath: ImageConstant.imgArrowDown,
-                                          height: 9.v,
-                                          width: 18.h)),
-                                  hintText: "Blood Group",
-                                  items: dropdownItemList2,
-                                  onChanged: (value) {
-                                    bloodgrp = value;
-                                  },
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'Please select a blood group';
-                                    } else
-                                      return null;
-                                  },
-                                )),
-                            SizedBox(height: 19.v),
-                            Padding(
-                                padding: EdgeInsets.only(left: 5.h, right: 4.h),
-                                child: CustomDropDown(
-                                  autofocus: false,
-                                  icon: Container(
-                                      margin: EdgeInsets.symmetric(
-                                          horizontal: 30.h, vertical: 16.v),
-                                      child: CustomImageView(
-                                          imagePath: ImageConstant.imgArrowDown,
-                                          height: 9.v,
-                                          width: 18.h)),
-                                  hintText: "Province",
-                                  items: dropdownItemList,
-                                  onChanged: (value) {
-                                    prov = value;
-                                  },
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'Please select a province';
-                                    }
-                                    return null;
-                                  },
-                                )),
-                            SizedBox(height: 19.v),
-                            Padding(
-                                padding: EdgeInsets.only(left: 5.h, right: 4.h),
-                                child: CustomDropDown(
-                                  autofocus: false,
-                                  icon: Container(
-                                      margin: EdgeInsets.symmetric(
-                                          horizontal: 30.h, vertical: 16.v),
-                                      child: CustomImageView(
-                                          imagePath: ImageConstant.imgArrowDown,
-                                          height: 9.v,
-                                          width: 18.h)),
-                                  hintText: "District",
-                                  items: dropdownItemList1,
-                                  onChanged: (value) {
-                                    district = value;
-                                  },
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'Please select a district';
-                                    }
-                                    return null;
-                                  },
-                                )),
-                            SizedBox(height: 17.v),
-                            _buildHospital(context),
-                            SizedBox(height: 17.v),
-                            _buildRequiredPint(context),
-                            SizedBox(height: 20.v),
-                            _buildPhoneNumber(context),
-                            SizedBox(height: 14.v),
-                            _buildDate(context),
-                            SizedBox(height: 20.v),
-                            _buildCaseDetails(context),
-                            SizedBox(height: 25.v),
-                            _buildRequest(context),
-                            SizedBox(height: 13.v)
-                          ])))
-                ]))))));
+            body: SingleChildScrollView(
+              child: Form(
+                  key: _formKey,
+                  child: SingleChildScrollView(
+                      child: SizedBox(
+                          child: Stack(
+                              alignment: Alignment.bottomCenter,
+                              children: [
+                        Align(
+                            alignment: Alignment.center,
+                            child: Container(
+                                decoration: BoxDecoration(
+                                    color: theme.colorScheme.primary))),
+                        Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 17.h, vertical: 29.v),
+                                child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      _buildName(context),
+                                      SizedBox(height: 19.v),
+                                      _buildContactPerson(context),
+                                      SizedBox(height: 19.v),
+                                      Padding(
+                                          padding: EdgeInsets.only(
+                                              left: 5.h, right: 4.h),
+                                          child: CustomDropDown(
+                                            autofocus: false,
+                                            icon: Container(
+                                                margin: EdgeInsets.symmetric(
+                                                    horizontal: 30.h,
+                                                    vertical: 16.v),
+                                                child: CustomImageView(
+                                                    imagePath: ImageConstant
+                                                        .imgArrowDown,
+                                                    height: 9.v,
+                                                    width: 18.h)),
+                                            hintText: "Blood Group",
+                                            items: dropdownItemList2,
+                                            onChanged: (value) {
+                                              bloodgrp = value;
+                                            },
+                                            validator: (value) {
+                                              if (value == null ||
+                                                  value.isEmpty) {
+                                                return 'Please select a blood group';
+                                              } else
+                                                return null;
+                                            },
+                                          )),
+                                      SizedBox(height: 19.v),
+                                      Padding(
+                                          padding: EdgeInsets.only(
+                                              left: 5.h, right: 4.h),
+                                          child: CustomDropDown(
+                                            autofocus: false,
+                                            icon: Container(
+                                                margin: EdgeInsets.symmetric(
+                                                    horizontal: 30.h,
+                                                    vertical: 16.v),
+                                                child: CustomImageView(
+                                                    imagePath: ImageConstant
+                                                        .imgArrowDown,
+                                                    height: 9.v,
+                                                    width: 18.h)),
+                                            hintText: "Province",
+                                            items: dropdownItemList,
+                                            onChanged: (value) {
+                                              prov = value;
+                                            },
+                                            validator: (value) {
+                                              if (value == null ||
+                                                  value.isEmpty) {
+                                                return 'Please select a province';
+                                              }
+                                              return null;
+                                            },
+                                          )),
+                                      SizedBox(height: 19.v),
+                                      Padding(
+                                          padding: EdgeInsets.only(
+                                              left: 5.h, right: 4.h),
+                                          child: CustomDropDown(
+                                            autofocus: false,
+                                            icon: Container(
+                                                margin: EdgeInsets.symmetric(
+                                                    horizontal: 30.h,
+                                                    vertical: 16.v),
+                                                child: CustomImageView(
+                                                    imagePath: ImageConstant
+                                                        .imgArrowDown,
+                                                    height: 9.v,
+                                                    width: 18.h)),
+                                            hintText: "District",
+                                            items: dropdownItemList1,
+                                            onChanged: (value) {
+                                              district = value;
+                                            },
+                                            validator: (value) {
+                                              if (value == null ||
+                                                  value.isEmpty) {
+                                                return 'Please select a district';
+                                              }
+                                              return null;
+                                            },
+                                          )),
+                                      SizedBox(height: 17.v),
+                                      _buildHospital(context),
+                                      SizedBox(height: 17.v),
+                                      _buildRequiredPint(context),
+                                      SizedBox(height: 20.v),
+                                      _buildPhoneNumber(context),
+                                      SizedBox(height: 14.v),
+                                      _buildDate(context),
+                                      SizedBox(height: 20.v),
+                                      _buildCaseDetails(context),
+                                      SizedBox(height: 25.v),
+                                      _buildRequest(context),
+                                      SizedBox(height: 13.v)
+                                    ])))
+                      ])))),
+            )));
   }
 
   /// Section Widget

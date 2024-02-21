@@ -18,15 +18,12 @@ class WelcomeScreen extends StatefulWidget {
 class _WelcomeScreenState extends State<WelcomeScreen> {
   void initState() {
     super.initState();
-    Timer(Duration(seconds: 1),
-            ()=>Navigator.pushReplacement(context,
-            MaterialPageRoute(builder:
-                (context) =>
-                    LogInScreen()
-            )
-        )
-    );
+    Timer(
+        Duration(seconds: 2),
+        () => Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => LogInScreen())));
   }
+
   @override
   Widget build(BuildContext context) {
     mediaQueryData = MediaQuery.of(context);
