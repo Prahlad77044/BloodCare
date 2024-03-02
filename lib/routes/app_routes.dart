@@ -1,6 +1,7 @@
 import 'package:bdc/presentation/Feedback/customer_support.dart';
 import 'package:bdc/presentation/health_calculator_screen/bmi_calc.dart';
 import 'package:bdc/presentation/requests_screen/reqverified.dart';
+import 'package:bdc/presentation/sign_up_screen/latlong.dart';
 import 'package:bdc/presentation/sign_up_screen/verification_screen.dart';
 import 'package:bdc/presentation/sign_up_screen/verified.dart';
 import 'package:bdc/presentation/rewards_screen/navigation.dart';
@@ -35,6 +36,8 @@ import '../presentation/requests_screen/widgets/requests screen.dart';
 
 class AppRoutes {
   static const String donorsNearby = '/donorsNearby';
+
+  static const String latLong = '/latlong';
 
   static const String plasmaCentre = '/plasma_centre';
 
@@ -116,6 +119,7 @@ class AppRoutes {
       '/donate_from_home_bottomsheet.dart';
 
   static Map<String, WidgetBuilder> routes = {
+    latLong: (context) => LatLong(),
     welcomeScreen: (context) => WelcomeScreen(),
     infoScreen: (context) => InfoScreen(),
     uploadPhotoScreen: (context) => UploadPhotoScreen(),
@@ -123,7 +127,10 @@ class AppRoutes {
     profileScreen: (context) => ProfileScreen(),
     uploadDocumentScreen: (context) => UploadDocumentScreen(),
     uploadDocumentTwoScreen: (context) => UploadDocumentTwoScreen(),
-    signUpScreen: (context) => SignUpScreen(),
+    signUpScreen: (context) => SignUpScreen(
+          latitude: 'Latitude(optional)',
+          longitude: 'Longitude(optional)',
+        ),
     verificationScreen: (context) => VerificationScreen(),
     verifiedScreen: (context) => SuccessfulVerified(),
     bmiCalculator: (context) => BMICalculator(),
@@ -143,7 +150,7 @@ class AppRoutes {
     docRequestOneScreen: (context) => DocRequestOneScreen(),
     requestsScreen: (context) => RequestsWidget(),
     homePageScreen: (context) => HomePageScreen(),
-    donorDetailScreen: (context) => DonorDetailScreen(),
+    donorDetailScreen: (context) => DonorDetailScreen(latitude: 'Latitude',longitude:'Longitude'),
     uploadProfilePhotoTwoScreen: (context) => UploadProfilePhotoTwoScreen(),
     uploadProfilePhotoScreen: (context) => UploadProfilePhotoScreen(),
     docHomePageScreen: (context) => DocHomePageScreen(),

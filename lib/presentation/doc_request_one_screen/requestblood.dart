@@ -26,7 +26,7 @@ class _DocRequestOneScreenState extends State<DocRequestOneScreen> {
   var district;
 
   Future RequestdetailsSubmit() async {
-    var url = 'http://192.168.1.2:4444/bloodcare/requests/';
+    var url = 'http://192.168.1.7:4444/bloodcare/requests/';
     String? accessToken = await secureStorage.read(key: 'access_token');
     String? refreshToken = await secureStorage.read(key: 'refresh_token');
     print('button pressed');

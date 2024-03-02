@@ -21,7 +21,7 @@ class _RequestsWidgetState extends State<RequestsWidget> {
   final FlutterSecureStorage secureStorage = FlutterSecureStorage();
 
   Future getRequest() async {
-    String url = "http://192.168.1.2:4444/bloodcare/requests/";
+    String url = "http://192.168.1.4:4444/bloodcare/requests/";
     String? accessToken = await secureStorage.read(key: 'access_token');
     String? refreshToken = await secureStorage.read(key: 'refresh_token');
     try {

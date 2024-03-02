@@ -16,7 +16,7 @@ class _DonorListScreenState extends State<DonorListScreen> {
   final FlutterSecureStorage secureStorage = FlutterSecureStorage();
 
   Future getDonors() async {
-    String url = "http://192.168.1.2:4444/bloodcare/donors/";
+    String url = "http://192.168.1.7:4444/bloodcare/donors/";
     String? accessToken = await secureStorage.read(key: 'access_token');
     String? refreshToken = await secureStorage.read(key: 'refresh_token');
     try {
@@ -76,9 +76,9 @@ class _DonorListScreenState extends State<DonorListScreen> {
               backgroundColor: theme.colorScheme.primary,
               appBar: AppBar(
                 title: Text('Donor\'s List',
-                style:TextStyle(
-                  color:Colors.white,
-                )),
+                    style: TextStyle(
+                      color: Colors.white,
+                    )),
                 backgroundColor: Colors.red[800],
               ),
               body: Container(

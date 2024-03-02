@@ -1,10 +1,62 @@
 import 'package:bdc/core/app_export.dart';
 import 'package:flutter/material.dart';
 import 'package:bdc/presentation/compatibility_chart_bottomsheet/compatibility_chart_bottomsheet.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'dart:convert';
 
-class HomePageScreen extends StatelessWidget {
+class HomePageScreen extends StatefulWidget {
   HomePageScreen({Key? key}) : super(key: key);
 
+  @override
+  State<HomePageScreen> createState() => _HomePageScreenState();
+}
+
+class _HomePageScreenState extends State<HomePageScreen> {
+  // Inside your home screen widget
+// void checkVerificationStatus() async {
+//   // Call your backend API to check verification status
+//   var response = await http.get(Uri.parse(''));
+
+//   if (!isVerified) {
+//     // Show the pop-up
+//     showVerificationPopup();
+//   }
+// }
+
+// void showVerificationPopup() {
+//   showDialog(
+//     context: context,
+//     builder: (BuildContext context) {
+//       return AlertDialog(
+//         title: Text('Blood Group Verification'),
+//         content: Text('Please upload your blood group verification document.'),
+//         actions: [
+//           TextButton(
+//             onPressed: () {
+//               Navigator.of(context).pop();
+//             },
+//             child: Text('Skip for now'),
+//           ),
+//           TextButton(
+//             onPressed: () {
+//               // Navigate to the upload screen
+//               Navigator.pushNamed(context, '/upload_verification');
+//             },
+//             child: Text('Upload Now'),
+//           ),
+//         ],
+//       );
+//     },
+//   );
+// }
+
+// @override
+// void initState() {
+//   super.initState();
+//   // Check verification status when the home screen is loaded
+//   checkVerificationStatus();
+// }
   @override
   Widget build(BuildContext context) {
     DateTime now = DateTime.now();

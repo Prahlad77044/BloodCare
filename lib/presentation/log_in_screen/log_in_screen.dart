@@ -15,40 +15,92 @@ class LogInScreen extends StatefulWidget {
 }
 
 class _LogInScreenState extends State<LogInScreen> {
+  bool _isLoading = false;
   final FlutterSecureStorage secureStorage = FlutterSecureStorage();
 
-  Future<Map<String, dynamic>> loginUser() async {
-    final response =
-        await http.post(Uri.parse('http://192.168.1.2:4444/api/login/'),
-            headers: <String, String>{
-              'Content-Type': 'application/json',
-              // Add other headers if needed
-            },
-            body: jsonEncode(
-              {
-                'phone_number': phoneNumberController.text.toString(),
-                'password': passwordController.text.toString(),
+  Future loginUser() async {
+    try {
+      setState(() {
+        _isLoading = true;
+        CircularProgressIndicator.adaptive();
+      });
+
+      final response =
+          await http.post(Uri.parse('http://192.168.1.7:4444/api/user/login/'),
+              headers: <String, String>{
+                'Content-Type': 'application/json',
+
+                // Add other headers if needed
               },
-            ));
-    print('${response.body}');
-    print('${response.statusCode}');
+              body: jsonEncode(
+                {
+                  'phone_number': phoneNumberController.text.toString(),
+                  'password': passwordController.text.toString(),
+                },
+              ));
+      print('${response.body}');
+      print('${response.statusCode}');
 
-    if (response.statusCode == 200) {
-      // Successful login, parse the response
-      final Map<String, dynamic> data = json.decode(response.body);
-      Navigator.pushNamed(context, '/home_page_screen');
-      var accessToken = data['token']['access'];
-      var refreshToken = data['token']['refresh'];
-      await secureStorage.write(key: 'access_token', value: '$accessToken');
-      await secureStorage.write(key: 'refresh_token', value: '$refreshToken');
+      if (response.statusCode == 200) {
+        // Successful login, parse the response
+        final Map<String, dynamic> data = json.decode(response.body);
+        var accessToken = data['token']['access'];
+        var refreshToken = data['token']['refresh'];
+        await secureStorage.write(key: 'access_token', value: '$accessToken');
+        await secureStorage.write(key: 'refresh_token', value: '$refreshToken');
+        Navigator.pushNamed(context, '/home_page_screen');
 
-      print('$refreshToken');
-      print('$accessToken');
+        return data;
+      } else if (response.statusCode == 400) {
+        final Map<String, dynamic> errorData = json.decode(response.body);
+        String errorMessage = errorData['detail'] ?? 'Failed to sign up';
 
-      return data;
-    } else {
-      // Handle login failure
-      throw Exception('error');
+        // Display the error message to the user
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Login Failed'),
+              content: Text(errorMessage),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+      } else {
+        // Handle login failure
+        throw Exception('error');
+      }
+    } catch (error) {
+      print('Error: $error');
+      // Display a generic error message to the user
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Error'),
+            content: Text('$error'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -57,7 +109,7 @@ class _LogInScreenState extends State<LogInScreen> {
   final TextEditingController passwordController = TextEditingController();
 
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  bool obscure = false;
+  bool obscure = true;
 
   @override
   Widget build(BuildContext context) {
@@ -92,6 +144,13 @@ class _LogInScreenState extends State<LogInScreen> {
                                 color: Colors.black,
                               ),
                               autofocus: false,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Phone Number is required';
+                                }
+                                // Add additional email validation if needed
+                                return null;
+                              },
                               textInputType: TextInputType.phone,
                               contentPadding: EdgeInsets.symmetric(
                                   horizontal: 11.h, vertical: 21.v),
@@ -108,18 +167,25 @@ class _LogInScreenState extends State<LogInScreen> {
                               ),
                               textInputAction: TextInputAction.done,
                               textInputType: TextInputType.visiblePassword,
-                              obscureText: !obscure,
+                              obscureText: obscure,
                               suffix: IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      obscure = !obscure;
-                                    });
-                                  },
-                                  icon: Icon(Icons.remove_red_eye)),
+                                icon: Icon(obscure
+                                    ? Icons.visibility
+                                    : Icons.visibility_off),
+                                onPressed: () {
+                                  setState(() {
+                                    obscure = !obscure;
+                                  });
+                                },
+                              ),
                               contentPadding: EdgeInsets.symmetric(
                                   horizontal: 11.h, vertical: 21.v),
                               validator: (value) {
-                                if (value == null || value.isEmpty) {}
+                                if (value == null || value.isEmpty) {
+                                  return 'Password is required';
+                                }
+                                // Add additional email validation if needed
+                                return null;
                               },
                               borderDecoration:
                                   TextFormFieldStyleHelper.outlineBlackTL25),
@@ -141,7 +207,10 @@ class _LogInScreenState extends State<LogInScreen> {
                               buttonTextStyle:
                                   CustomTextStyles.titleSmallRobotoOnPrimary_1,
                               onPressed: () {
-                                loginUser();
+                                if (_formKey.currentState?.validate() ??
+                                    false) {
+                                  loginUser();
+                                }
                               }),
                           Spacer(),
                           SizedBox(height: 3.v),
