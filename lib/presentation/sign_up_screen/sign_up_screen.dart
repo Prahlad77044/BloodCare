@@ -33,7 +33,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       });
 
       final response = await http.post(
-          Uri.parse('http://192.168.1.7:4444/api/user/register/'),
+          Uri.parse('http://192.168.1.4:4444/api/user/register/'),
           headers: <String, String>{
             'Content-Type': 'application/json',
             // Add other headers if needed
@@ -155,7 +155,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     mediaQueryData = MediaQuery.of(context);
     return Scaffold(
         resizeToAvoidBottomInset: false,
@@ -179,8 +178,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     child: Text("Please register below",
                                         style: CustomTextStyles
                                             .bodyMediumSegoeUIBluegray900))),
-
-
                             _buildName(context),
                             SizedBox(height: 13.v),
                             _buildEmail(context),
@@ -275,8 +272,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ));
   }
 
-
-
   /// Section Widget
   Widget _buildEmail(BuildContext context) {
     return Padding(
@@ -331,7 +326,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         padding: EdgeInsets.only(right: 7.h),
         child: CustomTextFormField(
           controller: dateOfBirthController,
-          hintText: "Date of Birth (YY-MM-DD)",
+          hintText: "Date of Birth (YY-MM-DD) in A.D.",
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Date of Birth is required';
@@ -407,7 +402,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         padding: EdgeInsets.only(right: 7.h),
         child: CustomTextFormField(
             controller: issueController,
-            hintText: "Issue(Optional)",
+            hintText: "Issue",
             textInputAction: TextInputAction.done,
             borderDecoration: TextFormFieldStyleHelper.outlineBlackTL25));
   }

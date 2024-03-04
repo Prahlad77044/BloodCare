@@ -26,7 +26,7 @@ class _DocRequestOneScreenState extends State<DocRequestOneScreen> {
   var district;
 
   Future RequestdetailsSubmit() async {
-    var url = 'http://192.168.1.7:4444/bloodcare/requests/';
+    var url = 'http://192.168.1.4:4444/bloodcare/requests/';
     String? accessToken = await secureStorage.read(key: 'access_token');
     String? refreshToken = await secureStorage.read(key: 'refresh_token');
     print('button pressed');
@@ -60,6 +60,23 @@ class _DocRequestOneScreenState extends State<DocRequestOneScreen> {
       // Navigator.pushNamed(context as BuildContext, '/home_page_screen');
       return ("${response.statusCode}");
     } else {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Unsuccessful'),
+            content: Text('Unsuccessful Post.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
       print("${response.body}");
     }
 
@@ -70,15 +87,7 @@ class _DocRequestOneScreenState extends State<DocRequestOneScreen> {
 
   TextEditingController contactPersonController = TextEditingController();
 
-  List<String> dropdownItemList = [
-    "Province No. 1",
-    "Madhesh Pradesh",
-    "Bagmati Pradesh",
-    "Gandaki Pradesh",
-    "Lumbini Pradesh",
-    "Karnali Pradesh",
-    "Sudurpaschim Pradesh"
-  ];
+  List<String> dropdownItemList = ["1", "2", "3", "4", "5", "6", "7"];
 
   TextEditingController districtController = TextEditingController();
 
@@ -192,7 +201,9 @@ class _DocRequestOneScreenState extends State<DocRequestOneScreen> {
         child: Scaffold(
             resizeToAvoidBottomInset: false,
             appBar: AppBar(
-              title: Text('Request for Blood'),
+              backgroundColor: Colors.red[800],
+              title: Text('Request for Blood',
+                  style: TextStyle(color: Colors.white)),
             ),
             body: SingleChildScrollView(
               child: Form(

@@ -85,131 +85,155 @@ class _RequestsWidgetState extends State<RequestsWidget> {
               ),
               backgroundColor: Colors.red[800],
             ),
-            body: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: ListView.separated(
-                  physics: BouncingScrollPhysics(),
-                  shrinkWrap: true,
-                  separatorBuilder: (context, index) {
-                    return SizedBox(height: 7.v);
-                  },
-                  itemCount: data.length,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 19.h,
-                        vertical: 7.v,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(
-                                  top: 7.v,
-                                  bottom: 1.v,
-                                ),
-                                child: Text(
-                                  "Name",
-                                  style: CustomTextStyles.bodySmallGray500,
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(left: 15.h),
-                                child: Text(
-                                  "${data[index]['contact_person']}",
-                                  style: theme.textTheme.titleMedium,
-                                ),
-                              ),
-                            ],
+            body: Column(
+              children: [
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "Please fill up this form if you're donating for first time.",
+                  style: TextStyle(color: Colors.red, fontSize: 14),
+                ),
+                TextButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/donor_detail_screen');
+                    },
+                    child: Text(
+                      'Click Here.',
+                      style: TextStyle(
+                          decoration: TextDecoration.underline,
+                          color: Colors.red),
+                    )),
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: ListView.separated(
+                      physics: BouncingScrollPhysics(),
+                      shrinkWrap: true,
+                      separatorBuilder: (context, index) {
+                        return SizedBox(height: 7.v);
+                      },
+                      itemCount: data.length,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 19.h,
+                            vertical: 7.v,
                           ),
-                          SizedBox(height: 13.v),
-                          Row(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Padding(
-                                padding: EdgeInsets.only(
-                                  top: 1.v,
-                                  bottom: 2.v,
-                                ),
-                                child: Text(
-                                  "Location",
-                                  style: CustomTextStyles.bodySmallGray500,
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(left: 4.h),
-                                child: Text(
-                                  "${data[index]['hospital']}",
-                                  style: CustomTextStyles.bodySmallGray800_1,
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 12.v),
-                          Row(
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(
-                                  top: 1.v,
-                                  bottom: 2.v,
-                                ),
-                                child: Text(
-                                  "Phone No.",
-                                  style: CustomTextStyles.bodySmallGray500,
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(left: 7.h),
-                                child: Text(
-                                  "${data[index]['phoneno']}",
-                                  style: CustomTextStyles.bodySmallGray800_1,
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 10.v),
-                          Row(
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(
-                                  top: 2.v,
-                                  bottom: 1.v,
-                                ),
-                                child: Text(
-                                  "Date ",
-                                  style: CustomTextStyles.bodySmallGray500,
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(left: 22.h),
-                                child: Text(
-                                  "${data[index]['req_date']}",
-                                  style: CustomTextStyles.bodySmallGray800_1,
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 15.v),
-                          Padding(
-                            padding: EdgeInsets.only(right: 2.h),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Expanded(
-                                  child: CustomElevatedButton(
-                                    height: 38.v,
-                                    text: "View",
-                                    margin: EdgeInsets.only(right: 19.h),
+                              Row(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                      top: 7.v,
+                                      bottom: 1.v,
+                                    ),
+                                    child: Text(
+                                      "Name",
+                                      style: CustomTextStyles.bodySmallGray500,
+                                    ),
                                   ),
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 15.h),
+                                    child: Text(
+                                      "${data[index]['contact_person']}",
+                                      style: theme.textTheme.titleMedium,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 13.v),
+                              Row(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                      top: 1.v,
+                                      bottom: 2.v,
+                                    ),
+                                    child: Text(
+                                      "Location",
+                                      style: CustomTextStyles.bodySmallGray500,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 4.h),
+                                    child: Text(
+                                      "${data[index]['hospital']}",
+                                      style:
+                                          CustomTextStyles.bodySmallGray800_1,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 12.v),
+                              Row(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                      top: 1.v,
+                                      bottom: 2.v,
+                                    ),
+                                    child: Text(
+                                      "Phone No.",
+                                      style: CustomTextStyles.bodySmallGray500,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 7.h),
+                                    child: Text(
+                                      "${data[index]['phoneno']}",
+                                      style:
+                                          CustomTextStyles.bodySmallGray800_1,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 10.v),
+                              Row(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                      top: 2.v,
+                                      bottom: 1.v,
+                                    ),
+                                    child: Text(
+                                      "Date ",
+                                      style: CustomTextStyles.bodySmallGray500,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 22.h),
+                                    child: Text(
+                                      "${data[index]['req_date']}",
+                                      style:
+                                          CustomTextStyles.bodySmallGray800_1,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 15.v),
+                              Padding(
+                                padding: EdgeInsets.only(right: 2.h),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Expanded(
+                                      child: CustomElevatedButton(
+                                        height: 38.v,
+                                        text: "View",
+                                        margin: EdgeInsets.only(right: 19.h),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    );
-                  }),
+                        );
+                      }),
+                ),
+              ],
             ),
           );
         });

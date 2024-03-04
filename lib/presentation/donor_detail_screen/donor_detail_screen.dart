@@ -12,7 +12,8 @@ import 'package:http/http.dart' as http;
 class DonorDetailScreen extends StatefulWidget {
   var latitude;
   var longitude;
-  DonorDetailScreen({Key? key, required this.latitude, required this.longitude}) : super(key: key);
+  DonorDetailScreen({Key? key, required this.latitude, required this.longitude})
+      : super(key: key);
 
   @override
   State<DonorDetailScreen> createState() => _DonorDetailScreenState();
@@ -24,6 +25,16 @@ class _DonorDetailScreenState extends State<DonorDetailScreen> {
   TextEditingController provinceNumberController = TextEditingController();
 
   TextEditingController districtController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize text controllers with provided latitude and longitude values
+    latController.text = widget.latitude ??
+        ''; // Provide default empty string if latitude is null
+    longController.text = widget.longitude ??
+        ''; // Provide default empty string if longitude is null
+  }
 
   List<String> dropdownItemList = [
     "Province No. 1",
@@ -129,7 +140,7 @@ class _DonorDetailScreenState extends State<DonorDetailScreen> {
   final FlutterSecureStorage secureStorage = FlutterSecureStorage();
 
   Future detailsSubmit() async {
-    var url = 'http://192.168.1.7:4444/bloodcare/donors/';
+    var url = 'http://192.168.1.6:4444/bloodcare/donors/';
     String? accessToken = await secureStorage.read(key: 'access_token');
     String? refreshToken = await secureStorage.read(key: 'refresh_token');
     print('button pressed');
@@ -154,15 +165,48 @@ class _DonorDetailScreenState extends State<DonorDetailScreen> {
         'district': district.toString(),
         'dob': dateOfBirthController.text.toString(),
         'gender': genderController.text.toString(),
-        'lattitude':latController.text.toString(),
-        'longitude':longController.text.toString()
-
+        'lattitude': latController.text.toString(),
+        'longitude': longController.text.toString()
       }),
     );
     if (response.statusCode == 201) {
       print('post successful');
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Successful'),
+            content: Text('Your details has been posted successfully'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/home_page_screen');
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
     } else {
       print('${response.statusCode}');
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Unsuccessful'),
+            content: Text('Please try again'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
     }
     print("${response.body}");
     return response.body;
@@ -183,16 +227,12 @@ class _DonorDetailScreenState extends State<DonorDetailScreen> {
 
   TextEditingController longController = TextEditingController();
 
-
-
   bool bySubmittingtheformIherebydecl = false;
 
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    latController.text = widget.latitude.toString();
-    longController.text = widget.longitude.toString();
     mediaQueryData = MediaQuery.of(context);
     return SafeArea(
         child: Scaffold(
@@ -218,27 +258,24 @@ class _DonorDetailScreenState extends State<DonorDetailScreen> {
                                   child: Text("Please enter your full detail",
                                       style:
                                           CustomTextStyles.bodyMediumGray900))),
-                          SizedBox(height: 5.v),
-                         TextButton(
+                          TextButton(
                               onPressed: () {
                                 Navigator.pushNamed(context, '/latlong');
                               },
                               child: Text(
-                                'To find your current latitude and longitude,click here.',
+                                "To find your current location's latitude and longitude,click here.",
                                 style: TextStyle(
                                     fontSize: 12,
                                     color: Colors.red[800],
                                     decoration: TextDecoration.underline,
                                     fontWeight: FontWeight.w100),
                               )),
-
                           _buildLatitude(context),
                           SizedBox(height: 17.v),
                           _buildLongitude(context),
                           SizedBox(height: 17.v),
                           _buildName(context),
                           SizedBox(height: 17.v),
-
                           _buildProvinceNumber(context),
                           SizedBox(height: 17.v),
                           _buildDistrict(context),
@@ -276,13 +313,15 @@ class _DonorDetailScreenState extends State<DonorDetailScreen> {
                           _buildSubmit(context)
                         ]))))));
   }
+
   Widget _buildLatitude(BuildContext context) {
     return Padding(
         padding: EdgeInsets.only(right: 7.h),
         child: CustomTextFormField(
-            textInputType: TextInputType.number,
-            controller: latController,
-            hintText: "Latitude(Optional)"));
+          textInputType: TextInputType.number,
+          controller: latController,
+          hintText: "Latitude(Optional)",
+        ));
   }
 
   Widget _buildLongitude(BuildContext context) {
@@ -293,6 +332,7 @@ class _DonorDetailScreenState extends State<DonorDetailScreen> {
             controller: longController,
             hintText: "Longitude(Optional)"));
   }
+
   /// Section Widget
   Widget _buildName(BuildContext context) {
     return Padding(
@@ -336,8 +376,6 @@ class _DonorDetailScreenState extends State<DonorDetailScreen> {
               district = value;
             }));
   }
-
-
 
   /// Section Widget
   Widget _buildCity(BuildContext context) {

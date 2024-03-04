@@ -34,7 +34,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     var userid = decodedToken['user_id'];
 
     try {
-      String url = "http://192.168.1.7:4444/bloodcare/images/";
+      String url = "http://192.168.1.6:4444/bloodcare/images/$userid";
 
       var response = await http.get(
         Uri.parse(url),
@@ -76,7 +76,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     // Extract user ID from the decoded token
     var userid = decodedToken['user_id'];
     try {
-      String url = "http://192.168.1.7:4444/api/user/profile/$userid";
+      String url = "http://192.168.1.6:4444/api/user/profile/$userid";
 
       var response = await http.get(
         Uri.parse(url),
@@ -190,7 +190,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 }
 
                 final data = snapshot.data as List;
-                image = data[0]['profilepic'];
+
                 return Scaffold(
                   backgroundColor: Colors.red[50],
                   appBar: AppBar(
@@ -239,7 +239,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           'assets/images/profile1.png',
                                         )
                                       : Image.network(
-                                          '$image'
+                                          '${data[0]['profilepic']}'
                                               as String, // Assuming image is a String URL
                                           fit: BoxFit.cover,
                                         ),

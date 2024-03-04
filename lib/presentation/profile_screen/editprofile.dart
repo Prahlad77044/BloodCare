@@ -95,7 +95,7 @@ class _EditProfileState extends State<EditProfile> {
     // Create a multipart request
     var request = http.MultipartRequest(
       'POST',
-      Uri.parse('http://192.168.1.7:4444/bloodcare/images/'),
+      Uri.parse('http://192.168.1.4:4444/bloodcare/images/'),
     );
 
     request.headers['Authorization'] = 'Bearer $yourToken';
@@ -153,7 +153,7 @@ class _EditProfileState extends State<EditProfile> {
 
     // Extract user ID from the decoded token
     var userid = decodedToken['user_id'];
-    var url = 'http://192.168.1.7:4444/api/user/profile/$userid/';
+    var url = 'http://192.168.1.4:4444/api/user/profile/$userid/';
 
     var response = await http.patch(
       Uri.parse(url),

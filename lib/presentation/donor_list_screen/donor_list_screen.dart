@@ -16,7 +16,7 @@ class _DonorListScreenState extends State<DonorListScreen> {
   final FlutterSecureStorage secureStorage = FlutterSecureStorage();
 
   Future getDonors() async {
-    String url = "http://192.168.1.7:4444/bloodcare/donors/";
+    String url = "http://192.168.1.4:4444/bloodcare/donors/";
     String? accessToken = await secureStorage.read(key: 'access_token');
     String? refreshToken = await secureStorage.read(key: 'refresh_token');
     try {
@@ -90,6 +90,24 @@ class _DonorListScreenState extends State<DonorListScreen> {
                     Text("Select from the list of donors to request",
                         style: CustomTextStyles.labelLargePrimary),
                     SizedBox(height: 15.v),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      "Please fill up this form if you're requesting blood for first time.",
+                      style: TextStyle(color: Colors.red, fontSize: 14),
+                    ),
+                    TextButton(
+                        onPressed: () {
+                          Navigator.pushNamed(
+                              context, '/doc_request_one_screen');
+                        },
+                        child: Text(
+                          'Click Here.',
+                          style: TextStyle(
+                              decoration: TextDecoration.underline,
+                              color: Colors.red),
+                        )),
                     Expanded(
                         child: Padding(
                             padding: EdgeInsets.only(right: 1.h),
@@ -203,7 +221,7 @@ class _DonorListScreenState extends State<DonorListScreen> {
                                         CustomElevatedButton(
                                           height: 34.v,
                                           width: 98.h,
-                                          text: "Request",
+                                          text: "View",
                                           margin: EdgeInsets.only(
                                             left: 12.h,
                                             top: 8.v,

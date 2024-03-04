@@ -26,7 +26,7 @@ class _LogInScreenState extends State<LogInScreen> {
       });
 
       final response =
-          await http.post(Uri.parse('http://192.168.1.7:4444/api/user/login/'),
+          await http.post(Uri.parse('http://192.168.1.4:4444/api/user/login/'),
               headers: <String, String>{
                 'Content-Type': 'application/json',
 
@@ -78,7 +78,7 @@ class _LogInScreenState extends State<LogInScreen> {
         throw Exception('error');
       }
     } catch (error) {
-      print('Error: $error');
+      print('Error: $error[]');
       // Display a generic error message to the user
       showDialog(
         context: context,

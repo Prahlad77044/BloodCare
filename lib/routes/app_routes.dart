@@ -57,7 +57,7 @@ class AppRoutes {
 
   static const String bloodTypeSelectScreen = '/blood_type_select_screen';
 
-  static const String uploadDocumentScreen = '/upload_document_screen';
+  static const String uploadDocumentScreen = '/upload_verification';
 
   static const String uploadDocumentTwoScreen = '/upload_document_two_screen';
 
@@ -150,7 +150,8 @@ class AppRoutes {
     docRequestOneScreen: (context) => DocRequestOneScreen(),
     requestsScreen: (context) => RequestsWidget(),
     homePageScreen: (context) => HomePageScreen(),
-    donorDetailScreen: (context) => DonorDetailScreen(latitude: 'Latitude',longitude:'Longitude'),
+    donorDetailScreen: (context) =>
+        DonorDetailScreen(latitude: null, longitude: null),
     uploadProfilePhotoTwoScreen: (context) => UploadProfilePhotoTwoScreen(),
     uploadProfilePhotoScreen: (context) => UploadProfilePhotoScreen(),
     docHomePageScreen: (context) => DocHomePageScreen(),

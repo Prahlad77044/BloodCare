@@ -5,6 +5,8 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:convert';
 
+import 'package:jwt_decoder/jwt_decoder.dart';
+
 class HomePageScreen extends StatefulWidget {
   HomePageScreen({Key? key}) : super(key: key);
 
@@ -13,50 +15,73 @@ class HomePageScreen extends StatefulWidget {
 }
 
 class _HomePageScreenState extends State<HomePageScreen> {
-  // Inside your home screen widget
-// void checkVerificationStatus() async {
-//   // Call your backend API to check verification status
-//   var response = await http.get(Uri.parse(''));
+  final FlutterSecureStorage secureStorage = FlutterSecureStorage();
 
-//   if (!isVerified) {
-//     // Show the pop-up
-//     showVerificationPopup();
-//   }
-// }
+  void checkVerificationStatus() async {
+    String? accessToken = await secureStorage.read(key: 'access_token');
+    String? refreshToken = await secureStorage.read(key: 'refresh_token');
+    // Call your backend API to check verification status
+    String yourToken = "$accessToken";
 
-// void showVerificationPopup() {
-//   showDialog(
-//     context: context,
-//     builder: (BuildContext context) {
-//       return AlertDialog(
-//         title: Text('Blood Group Verification'),
-//         content: Text('Please upload your blood group verification document.'),
-//         actions: [
-//           TextButton(
-//             onPressed: () {
-//               Navigator.of(context).pop();
-//             },
-//             child: Text('Skip for now'),
-//           ),
-//           TextButton(
-//             onPressed: () {
-//               // Navigate to the upload screen
-//               Navigator.pushNamed(context, '/upload_verification');
-//             },
-//             child: Text('Upload Now'),
-//           ),
-//         ],
-//       );
-//     },
-//   );
-// }
+    Map<String, dynamic> decodedToken = JwtDecoder.decode(yourToken);
+    print('$decodedToken');
 
-// @override
-// void initState() {
-//   super.initState();
-//   // Check verification status when the home screen is loaded
-//   checkVerificationStatus();
-// }
+    // Extract user ID from the decoded token
+    var userid = decodedToken['user_id'];
+    var response = await http.get(
+      Uri.parse('http://192.168.1.4:4444/api/user/Document/$userid'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $accessToken',
+      },
+    );
+    print('${response.body}');
+
+    if (response.statusCode == 200) {
+      var responseData = jsonDecode(response.body);
+      void showVerificationPopup() {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Blood Group Verification'),
+              content:
+                  Text('Please upload your blood group verification document.'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Skip for now'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    // Navigate to the upload screen
+                    Navigator.pushNamed(context, '/upload_verification');
+                  },
+                  child: Text('Upload Now'),
+                ),
+              ],
+            );
+          },
+        );
+      }
+
+      bool isVerified = responseData['isverified'];
+      if (isVerified == false) {
+        // Show the pop-up
+        showVerificationPopup();
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // Check verification status when the home screen is loaded
+    checkVerificationStatus();
+  }
+
   @override
   Widget build(BuildContext context) {
     DateTime now = DateTime.now();

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 
@@ -12,13 +13,18 @@ class CustomerSupport extends StatefulWidget {
 }
 
 class _CustomerSupportState extends State<CustomerSupport> {
+  final FlutterSecureStorage secureStorage = FlutterSecureStorage();
+
   Future feedbackPost() async {
-    var url = 'http://192.168.1.2:4444/api/feedback/';
+    String? accessToken = await secureStorage.read(key: 'access_token');
+    String? refreshToken = await secureStorage.read(key: 'refresh_token');
+    var url = 'http://192.168.1.6:4444/api/feedback/';
     print('button pressed');
     var response = await http.post(
       Uri.parse(url),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $accessToken',
       },
       body: jsonEncode(<String, String>{
         'name': name.text.toString(),
@@ -49,7 +55,10 @@ class _CustomerSupportState extends State<CustomerSupport> {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          title: Text('Feedback'),
+          title: Text(
+            'Feedback',
+            style: TextStyle(color: Colors.white),
+          ),
           backgroundColor: Colors.red[800],
         ),
         body: SingleChildScrollView(
