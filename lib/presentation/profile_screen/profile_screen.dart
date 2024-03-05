@@ -34,7 +34,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     var userid = decodedToken['user_id'];
 
     try {
-      String url = "http://192.168.1.6:4444/bloodcare/images/$userid";
+      String url = "http://192.168.1.4:4444/api/user/profilepictures/";
 
       var response = await http.get(
         Uri.parse(url),
@@ -47,7 +47,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
       if (response.statusCode == 200) {
         var responseData = jsonDecode(response.body);
-        image = responseData[0]['profilepic'];
         // if responseData is a Map, wrap it in a list
         if (responseData is Map) {
           return [responseData];
@@ -76,7 +75,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     // Extract user ID from the decoded token
     var userid = decodedToken['user_id'];
     try {
-      String url = "http://192.168.1.6:4444/api/user/profile/$userid";
+      String url = "http://192.168.1.4:4444/api/user/profile/$userid/";
 
       var response = await http.get(
         Uri.parse(url),
@@ -234,13 +233,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     ]),
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(100),
-                                  child: image == null
+                                  child: data[0]['profilepic'] == null
                                       ? Image.asset(
                                           'assets/images/profile1.png',
                                         )
                                       : Image.network(
-                                          '${data[0]['profilepic']}'
-                                              as String, // Assuming image is a String URL
+                                          "http://192.168.1.4:4444" +
+                                              "${data[0]['profilepic']}", // Assuming image is a String URL
                                           fit: BoxFit.cover,
                                         ),
                                 ),

@@ -1,17 +1,13 @@
 import 'dart:convert';
-import 'package:bdc/core/app_export.dart';
+import 'package:http/http.dart' as http;
 import 'package:bdc/widgets/custom_elevated_button.dart';
-import 'package:bdc/widgets/custom_outlined_button.dart';
+import 'package:bdc/core/app_export.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
 
-// ignore: must_be_immutable
 class RequestsWidget extends StatefulWidget {
-  const RequestsWidget({Key? key})
-      : super(
-          key: key,
-        );
+  const RequestsWidget({Key? key}) : super(key: key);
 
   @override
   State<RequestsWidget> createState() => _RequestsWidgetState();
@@ -130,7 +126,7 @@ class _RequestsWidgetState extends State<RequestsWidget> {
                                       bottom: 1.v,
                                     ),
                                     child: Text(
-                                      "Name",
+                                      "Contact Person",
                                       style: CustomTextStyles.bodySmallGray500,
                                     ),
                                   ),
@@ -223,6 +219,10 @@ class _RequestsWidgetState extends State<RequestsWidget> {
                                         height: 38.v,
                                         text: "View",
                                         margin: EdgeInsets.only(right: 19.h),
+                                        onPressed: () {
+                                          _showUserDetailsBottomSheet(
+                                              context, data[index]);
+                                        },
                                       ),
                                     ),
                                   ],
@@ -237,5 +237,87 @@ class _RequestsWidgetState extends State<RequestsWidget> {
             ),
           );
         });
+  }
+
+  void _showUserDetailsBottomSheet(
+      BuildContext context, Map<String, dynamic> userDetails) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          padding: EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                userDetails['contact_person'] ?? 'User Details',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+              SizedBox(height: 10),
+              Text("Blood Group: ${userDetails['bloodgroup']}"),
+              SizedBox(height: 10),
+              Text("Patient Name: ${userDetails['pat_name']}"),
+              SizedBox(height: 10),
+              Text("Contact Person: ${userDetails['contact_person']}"),
+              SizedBox(height: 10),
+              Text("Hospital: ${userDetails['hospital']}"),
+              SizedBox(height: 10),
+              Text("Phone No.: ${userDetails['phoneno']}"),
+              SizedBox(height: 10),
+              Text("Required Date: ${userDetails['req_date']}"),
+              SizedBox(height: 10),
+              Text("Required Pint: ${userDetails['reqpint']}"),
+              SizedBox(height: 10),
+              Text("District: ${userDetails['district']}"),
+              SizedBox(height: 10),
+              Text("Case Details: ${userDetails['case_details']}"),
+              SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      _launchDialer(userDetails['phoneno']);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Text('Contact',
+                          style: TextStyle(color: Colors.white)),
+                    ),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      // Add your logic here
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Text('Confirm',
+                          style: TextStyle(color: Colors.white)),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future _launchDialer(String phoneNumber) async {
+    print('$phoneNumber');
+    print('launch fxn called');
+    Uri phoneno = Uri.parse('tel:+977$phoneNumber');
+    if (await launchUrl(phoneno)) {
+      print('dialeropened');
+    } else {
+      print('dialernotopened');
+
+      //dailer is not opened
+    }
   }
 }

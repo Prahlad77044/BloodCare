@@ -1,5 +1,7 @@
 import 'package:bdc/presentation/Feedback/customer_support.dart';
 import 'package:bdc/presentation/health_calculator_screen/bmi_calc.dart';
+import 'package:bdc/presentation/health_calculator_screen/navigate.dart';
+import 'package:bdc/presentation/health_calculator_screen/watervolume.dart';
 import 'package:bdc/presentation/requests_screen/reqverified.dart';
 import 'package:bdc/presentation/sign_up_screen/latlong.dart';
 import 'package:bdc/presentation/sign_up_screen/verification_screen.dart';
@@ -47,6 +49,8 @@ class AppRoutes {
 
   static const String bmiCalculator = '/bmi_calc';
 
+  static const String healthCalculatorHome = '/health_calc';
+
   static const String welcomeScreen = '/welcome_screen';
 
   static const String uploadPhotoScreen = '/upload_photo_screen';
@@ -68,6 +72,8 @@ class AppRoutes {
   static const String appointmentPageFivePage = '/appointment_page_five_page';
 
   static const String appointmentPageThreePage = '/appointment_page_three_page';
+
+  static const String waterVolumeCalculator = '/water_volume';
 
   static const String appointmentPageThreeTabContainerScreen =
       '/appointment_page_three_tab_container_screen';
@@ -119,6 +125,8 @@ class AppRoutes {
       '/donate_from_home_bottomsheet.dart';
 
   static Map<String, WidgetBuilder> routes = {
+    healthCalculatorHome: (context) => HealthCalculatorHome(),
+    waterVolumeCalculator: (context) => WaterVolumeCalculator(),
     latLong: (context) => LatLong(),
     welcomeScreen: (context) => WelcomeScreen(),
     infoScreen: (context) => InfoScreen(),

@@ -47,7 +47,10 @@ class _DonorsNearbyState extends State<DonorsNearby> {
           'bloodgrp': userData['bloodgrp'],
           'gender': userData['gender'],
           'dob': userData['dob'],
-          'phoneno': userData['phoneno']
+          'phoneno': userData['phoneno'],
+          'prov_no': userData['prov_no'],
+          'city': userData['city'],
+          'district': userData['district']
         });
       }
       return userLocations;
@@ -83,7 +86,10 @@ class _DonorsNearbyState extends State<DonorsNearby> {
           'bloodgrp': userData['bloodgrp'],
           'gender': userData['gender'],
           'dob': userData['dob'],
-          'phoneno': userData['phoneno']
+          'phoneno': userData['phoneno'],
+          'prov_no': userData['prov_no'],
+          'city': userData['city'],
+          'district': userData['district']
         });
       }
       return userLocations;
@@ -253,6 +259,12 @@ class _DonorsNearbyState extends State<DonorsNearby> {
               Text("Phone No.: ${donorDetails['phoneno']}"),
               SizedBox(height: 10),
               Text("DOB: ${donorDetails['dob']}"),
+              SizedBox(height: 10),
+              Text("Province no.: ${donorDetails['prov_no']}"),
+              SizedBox(height: 10),
+              Text("City: ${donorDetails['city']}"),
+              SizedBox(height: 10),
+              Text("District: ${donorDetails['district']}"),
               SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,

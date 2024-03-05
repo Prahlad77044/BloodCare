@@ -9,12 +9,13 @@ import 'package:http/http.dart' as http;
 
 class EditProfile extends StatefulWidget {
   String name, phone, address, email, bloodgroup;
-  EditProfile(
-      {required this.name,
-      required this.address,
-      required this.bloodgroup,
-      required this.email,
-      required this.phone});
+  EditProfile({
+    required this.name,
+    required this.address,
+    required this.bloodgroup,
+    required this.email,
+    required this.phone,
+  });
 
   @override
   State<EditProfile> createState() => _EditProfileState();
@@ -95,7 +96,7 @@ class _EditProfileState extends State<EditProfile> {
     // Create a multipart request
     var request = http.MultipartRequest(
       'POST',
-      Uri.parse('http://192.168.1.4:4444/bloodcare/images/'),
+      Uri.parse('http://192.168.1.4:4444/api/user/profilepictures/'),
     );
 
     request.headers['Authorization'] = 'Bearer $yourToken';
@@ -153,7 +154,7 @@ class _EditProfileState extends State<EditProfile> {
 
     // Extract user ID from the decoded token
     var userid = decodedToken['user_id'];
-    var url = 'http://192.168.1.4:4444/api/user/profile/$userid/';
+    var url = 'http://192.168.1.4:4444/api/user/profile/';
 
     var response = await http.patch(
       Uri.parse(url),

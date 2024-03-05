@@ -18,7 +18,7 @@ class _CustomerSupportState extends State<CustomerSupport> {
   Future feedbackPost() async {
     String? accessToken = await secureStorage.read(key: 'access_token');
     String? refreshToken = await secureStorage.read(key: 'refresh_token');
-    var url = 'http://192.168.1.6:4444/api/feedback/';
+    var url = 'http://192.168.1.4:4444/api/feedback/';
     print('button pressed');
     var response = await http.post(
       Uri.parse(url),

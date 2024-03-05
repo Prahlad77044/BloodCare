@@ -4,7 +4,6 @@ import 'package:bdc/presentation/compatibility_chart_bottomsheet/compatibility_c
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:convert';
-
 import 'package:jwt_decoder/jwt_decoder.dart';
 
 class HomePageScreen extends StatefulWidget {
@@ -16,8 +15,40 @@ class HomePageScreen extends StatefulWidget {
 
 class _HomePageScreenState extends State<HomePageScreen> {
   final FlutterSecureStorage secureStorage = FlutterSecureStorage();
+  bool isverified = false;
+  void showVerificationPopup() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            'Blood Group Verification',
+            style:
+                TextStyle(color: Colors.red[800], fontWeight: FontWeight.bold),
+          ),
+          content: Text(
+              'Please upload your blood group verification document.You wont be able to donate blood until you are verified.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Skip for now'),
+            ),
+            TextButton(
+              onPressed: () {
+                // Navigate to the upload screen
+                Navigator.pushNamed(context, '/upload_verification');
+              },
+              child: Text('Upload Now'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
-  void checkVerificationStatus() async {
+  Future checkVerificationStatus() async {
     String? accessToken = await secureStorage.read(key: 'access_token');
     String? refreshToken = await secureStorage.read(key: 'refresh_token');
     // Call your backend API to check verification status
@@ -29,7 +60,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
     // Extract user ID from the decoded token
     var userid = decodedToken['user_id'];
     var response = await http.get(
-      Uri.parse('http://192.168.1.4:4444/api/user/Document/$userid'),
+      Uri.parse('http://192.168.1.4:4444/api/user/profile/$userid/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $accessToken',
@@ -44,9 +75,13 @@ class _HomePageScreenState extends State<HomePageScreen> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text('Blood Group Verification'),
-              content:
-                  Text('Please upload your blood group verification document.'),
+              title: Text(
+                'Blood Group Verification',
+                style: TextStyle(
+                    color: Colors.red[800], fontWeight: FontWeight.bold),
+              ),
+              content: Text(
+                  'Please upload your blood group verification document.You wont be able to donate blood until you are verified.'),
               actions: [
                 TextButton(
                   onPressed: () {
@@ -67,7 +102,10 @@ class _HomePageScreenState extends State<HomePageScreen> {
         );
       }
 
-      bool isVerified = responseData['isverified'];
+      bool isVerified = responseData['is_verified'];
+      setState(() {
+        isverified = isVerified;
+      });
       if (isVerified == false) {
         // Show the pop-up
         showVerificationPopup();
@@ -129,9 +167,11 @@ class _HomePageScreenState extends State<HomePageScreen> {
                     title: Text('Health Calculator'),
                   ),
                   ListTile(
-                    onTap: () {},
-                    leading: Icon(Icons.account_circle_rounded),
-                    title: Text('My Profile'),
+                    onTap: () {
+                      Navigator.pushNamed(context, '/upload_verification');
+                    },
+                    leading: Icon(Icons.edit_document),
+                    title: Text('Upload Document'),
                   ),
                   ListTile(
                     onTap: () {
@@ -221,7 +261,11 @@ class _HomePageScreenState extends State<HomePageScreen> {
                                   ]))),
                       GestureDetector(
                         onTap: () {
-                          onTapSeventyTwo(context);
+                          if (isverified == true) {
+                            onTapSeventyTwo(context);
+                          } else {
+                            showVerificationPopup();
+                          }
                         },
                         child: Container(
                             margin: EdgeInsets.only(left: 34.h),

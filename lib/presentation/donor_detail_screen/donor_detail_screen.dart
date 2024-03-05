@@ -37,13 +37,7 @@ class _DonorDetailScreenState extends State<DonorDetailScreen> {
   }
 
   List<String> dropdownItemList = [
-    "Province No. 1",
-    "Madhesh Pradesh",
-    "Bagmati Pradesh",
-    "Gandaki Pradesh",
-    "Lumbini Pradesh",
-    "Karnali Pradesh",
-    "Sudurpaschim Pradesh"
+    "1","2","3","4","5","6","7"
   ];
 
   TextEditingController cityController = TextEditingController();
@@ -140,7 +134,7 @@ class _DonorDetailScreenState extends State<DonorDetailScreen> {
   final FlutterSecureStorage secureStorage = FlutterSecureStorage();
 
   Future detailsSubmit() async {
-    var url = 'http://192.168.1.6:4444/bloodcare/donors/';
+    var url = 'http://192.168.1.4:4444/bloodcare/donors/';
     String? accessToken = await secureStorage.read(key: 'access_token');
     String? refreshToken = await secureStorage.read(key: 'refresh_token');
     print('button pressed');

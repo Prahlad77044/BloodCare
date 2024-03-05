@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:bdc/core/app_export.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
@@ -88,7 +87,7 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> {
     // Create a multipart request
     var request = http.MultipartRequest(
       'POST',
-      Uri.parse('http://192.168.1.6:4444/bloodcare/images/'),
+      Uri.parse('http://192.168.1.4:4444/api/user/documents/'),
     );
 
     request.headers['Authorization'] = 'Bearer $yourToken';
@@ -98,11 +97,12 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> {
     if (_image != null) {
       request.files.add(
         await http.MultipartFile.fromPath(
-          'profilepic', // Field name on the backend
+          'documentpic', // Field name on the backend
           _image!.path,
         ),
       );
     }
+    request.fields['user_id'] = '$userid';
 
     try {
       // Send the request and get the response
@@ -116,7 +116,7 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> {
 
         // Show a success message to the user
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Picture updated successfully')),
+          SnackBar(content: Text('Document updated successfully')),
         );
       } else {
         final responseString = await response.stream.bytesToString();
@@ -124,7 +124,7 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> {
         print('Response Body: $responseString');
         // Show an error message to the user
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to update picture')),
+          SnackBar(content: Text('Failed to update document')),
         );
       }
     } catch (e) {
@@ -142,40 +142,57 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> {
 
     return SafeArea(
       child: Scaffold(
-        body: Container(
-          width: double.maxFinite,
-          padding: EdgeInsets.symmetric(
-            horizontal: 44.h,
-            vertical: 58.v,
-          ),
-          child: Column(
-            children: [
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Padding(
-                  padding: EdgeInsets.only(left: 8.h),
-                  child: Text(
-                    "Upload here",
-                    style: CustomTextStyles.titleLargePrimary,
+        appBar: AppBar(
+          title: Text('Upload Document', style: TextStyle(color: Colors.white)),
+          backgroundColor: Colors.red[800],
+        ),
+        body: SingleChildScrollView(
+          child: Container(
+            width: double.maxFinite,
+            padding: EdgeInsets.symmetric(
+              horizontal: 44.h,
+              vertical: 58.v,
+            ),
+            child: Column(
+              children: [
+                SizedBox(height: 10.v),
+                GestureDetector(
+                  onTap: showOptions,
+                  child: ClipRRect(
+                    child: _image == null
+                        ? Icon(
+                            Icons.image,
+                            size: 300,
+                          )
+                        : Image.file(
+                            _image!,
+                            fit: BoxFit.cover,
+                          ),
                   ),
                 ),
-              ),
-              SizedBox(height: 77.v),
-              GestureDetector(
-                onTap: showOptions,
-                child: CustomImageView(
-                  imagePath: ImageConstant.imgWhiteCloudWith,
-                  height: 277.v,
-                  width: 287.h,
+                SizedBox(height: 40.v),
+                Text(
+                  "It may take some time to verify your document.Please be patient",
+                  style: CustomTextStyles.titleSmallPrimaryMedium,
                 ),
-              ),
-              SizedBox(height: 61.v),
-              Text(
-                "It may take some time to verify your document.Please be patient",
-                style: CustomTextStyles.titleSmallPrimaryMedium,
-              ),
-              SizedBox(height: 5.v),
-            ],
+                SizedBox(height: 5.v),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SizedBox(
+                    height: 40,
+                    width: 100,
+                    child: ElevatedButton(
+                        onPressed: () {
+                          imageSubmit1();
+                        },
+                        child: Text(
+                          'Submit',
+                          style: TextStyle(color: Colors.white),
+                        )),
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),
