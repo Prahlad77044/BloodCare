@@ -340,9 +340,12 @@ class _DonorListScreenState extends State<DonorListScreen> {
               onPressed: () {
                 // Add your logic here to handle confirmation
               },
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text('Confirm', style: TextStyle(color: Colors.white)),
+              child: GestureDetector(
+                onTap: () {},
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('Confirm', style: TextStyle(color: Colors.white)),
+                ),
               ),
             ),
           ],

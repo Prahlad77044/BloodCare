@@ -22,47 +22,48 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   final FlutterSecureStorage secureStorage = FlutterSecureStorage();
   var image;
-  Future getProfileImage() async {
-    String? accessToken = await secureStorage.read(key: 'access_token');
-    String? refreshToken = await secureStorage.read(key: 'refresh_token');
-    String yourToken = "$accessToken";
-
-    Map<String, dynamic> decodedToken = JwtDecoder.decode(yourToken);
-    print('$decodedToken');
-
-    // Extract user ID from the decoded token
-    var userid = decodedToken['user_id'];
-
-    try {
-      String url = "http://192.168.1.4:4444/api/user/profilepictures/";
-
-      var response = await http.get(
-        Uri.parse(url),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': 'Bearer $accessToken',
-        },
-      );
-      print("${response.body}");
-
-      if (response.statusCode == 200) {
-        var responseData = jsonDecode(response.body);
-        // if responseData is a Map, wrap it in a list
-        if (responseData is Map) {
-          return [responseData];
-        } else {
-          return responseData;
-        }
-      } else {
-        print('The response is not JSON.');
-        return []; // return an empty list if the response is not JSON
-      }
-    } catch (e) {
-      print('Caught error: $e');
-
-      return [e];
-    }
-  }
+  // Future getProfileImage() async {
+  //   String? accessToken = await secureStorage.read(key: 'access_token');
+  //   String? refreshToken = await secureStorage.read(key: 'refresh_token');
+  //   String yourToken = "$accessToken";
+  //
+  //   Map<String, dynamic> decodedToken = JwtDecoder.decode(yourToken);
+  //   print('$decodedToken');
+  //
+  //   // Extract user ID from the decoded token
+  //   var userid = decodedToken['user_id'];
+  //
+  //   try {
+  //     String url = "http://192.168.1.4:4444/api/user/profilepictures/";
+  //
+  //     var response = await http.get(
+  //       Uri.parse(url),
+  //       headers: <String, String>{
+  //         'Content-Type': 'application/json; charset=UTF-8',
+  //         'Authorization': 'Bearer $accessToken',
+  //       },
+  //     );
+  //     print("${response.body}");
+  //
+  //     if (response.statusCode == 200) {
+  //       var responseData = jsonDecode(response.body);
+  //       // Return the image URL if available
+  //       if (responseData['profilepic'] != null) {
+  //         return responseData['profilepic'];
+  //       } else {
+  //         // Return the default image URL if no profile picture is available
+  //         return 'assets/images/profile1.png';
+  //       }
+  //     } else {
+  //       // Return the default image URL if status code 500 is returned
+  //       return 'assets/images/profile1.png';
+  //     }
+  //   } catch (e) {
+  //     print('Caught error: $e');
+  //     // Return the default image URL if an error occurs
+  //     return 'assets/images/profile1.png';
+  //   }
+  // }
 
   Future getProfile() async {
     String? accessToken = await secureStorage.read(key: 'access_token');
@@ -75,7 +76,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     // Extract user ID from the decoded token
     var userid = decodedToken['user_id'];
     try {
-      String url = "http://192.168.1.4:4444/api/user/profile/$userid/";
+      String url = "http://192.168.1.4:4444/api/user/profile/$userid";
 
       var response = await http.get(
         Uri.parse(url),
@@ -146,7 +147,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void initState() {
     super.initState();
     getProfile();
-    getProfileImage();
+    // getProfileImage();
   }
 
   @override
@@ -173,22 +174,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
           _controller2.text = "${data[0]['phone_number']}";
           _controller4.text = "${data[0]['bloodgroup']}";
           _controller3.text = "${data[0]['email']}";
-          return FutureBuilder(
-              future: getProfileImage(),
-              builder: (context, snapshot) {
-                if (snapshot.data == null) {
-                  return Container(
-                    child: Center(
-                      child: Column(
-                        children: [
-                          CircularProgressIndicator.adaptive(),
-                        ],
-                      ),
-                    ),
-                  );
-                }
-
-                final data = snapshot.data as List;
+          // return FutureBuilder(
+          //     future: getProfileImage(),
+          //     builder: (context, snapshot) {
+          //       final data = snapshot.data as List;
 
                 return Scaffold(
                   backgroundColor: Colors.red[50],
@@ -232,17 +221,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       ),
                                     ]),
                                 child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(100),
-                                  child: data[0]['profilepic'] == null
-                                      ? Image.asset(
-                                          'assets/images/profile1.png',
-                                        )
-                                      : Image.network(
-                                          "http://192.168.1.4:4444" +
-                                              "${data[0]['profilepic']}", // Assuming image is a String URL
-                                          fit: BoxFit.cover,
-                                        ),
-                                ),
+                                    borderRadius: BorderRadius.circular(100),
+                                    child: //data[0]['profilepic'] == null
+                                        //     ?
+                                        Image.asset(
+                                      'assets/images/profile1.png',
+                                    )
+                                    // : Image.network(
+                                    //     "http://192.168.1.4:4444" +
+                                    //         "${data[0]['profilepic']}", // Assuming image is a String URL
+                                    //     fit: BoxFit.cover,
+                                    //   ),
+                                    ),
                               ),
                             ),
                           ),
@@ -546,6 +536,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 );
               });
-        });
+
   }
 }

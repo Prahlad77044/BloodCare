@@ -1,4 +1,5 @@
 import 'package:bdc/presentation/Feedback/customer_support.dart';
+import 'package:bdc/presentation/doc_request_one_screen/PendingRequest.dart';
 import 'package:bdc/presentation/health_calculator_screen/bmi_calc.dart';
 import 'package:bdc/presentation/health_calculator_screen/navigate.dart';
 import 'package:bdc/presentation/health_calculator_screen/watervolume.dart';
@@ -33,6 +34,7 @@ import 'package:bdc/presentation/upload_profile_photo_screen/upload_profile_phot
 import 'package:bdc/presentation/doc_home_page_screen/doc_home_page_screen.dart';
 import 'package:bdc/presentation/app_navigation_screen/app_navigation_screen.dart';
 
+import '../presentation/info_screen/plasmadonation.dart';
 import '../presentation/maps/map.dart';
 import '../presentation/requests_screen/widgets/requests screen.dart';
 
@@ -67,6 +69,8 @@ class AppRoutes {
 
   static const String signUpScreen = '/sign_up_screen';
 
+  static const plasmaDonationPage ='/plasma_donation_page';
+
   static const String contactDonorScreen = '/contact_donor_screen';
 
   static const String appointmentPageFivePage = '/appointment_page_five_page';
@@ -90,6 +94,8 @@ class AppRoutes {
   static const String donorListScreen = '/donor_list_screen';
 
   static const String docRequestOneScreen = '/doc_request_one_screen';
+
+  static const String pendingRequest = '/pending_request_screen';
 
   static const String homePageScreen = '/home_page_screen';
 
@@ -137,10 +143,12 @@ class AppRoutes {
     profileScreen: (context) => ProfileScreen(),
     uploadDocumentScreen: (context) => UploadDocumentScreen(),
     uploadDocumentTwoScreen: (context) => UploadDocumentTwoScreen(),
+    pendingRequest: (context) => PendingRequest(),
     signUpScreen: (context) => SignUpScreen(
           latitude: 'Latitude(optional)',
           longitude: 'Longitude(optional)',
         ),
+    plasmaDonationPage:(context)=>PlasmaDonationPage(),
     verificationScreen: (context) => VerificationScreen(),
     verifiedScreen: (context) => SuccessfulVerified(),
     bmiCalculator: (context) => BMICalculator(),

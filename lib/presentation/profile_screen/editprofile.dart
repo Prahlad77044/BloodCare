@@ -124,7 +124,7 @@ class _EditProfileState extends State<EditProfile> {
 
         // Show a success message to the user
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Profile Picture updated successfully')),
+          SnackBar(content: Text('Profle Info updated successfully')),
         );
       } else {
         final responseString = await response.stream.bytesToString();
@@ -132,7 +132,7 @@ class _EditProfileState extends State<EditProfile> {
         print('Response Body: $responseString');
         // Show an error message to the user
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to update profile picture')),
+          SnackBar(content: Text('Failed to update profile info')),
         );
       }
     } catch (e) {

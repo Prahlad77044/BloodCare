@@ -1,4 +1,5 @@
 import 'package:bdc/core/app_export.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:bdc/presentation/compatibility_chart_bottomsheet/compatibility_chart_bottomsheet.dart';
 import 'package:http/http.dart' as http;
@@ -186,6 +187,13 @@ class _HomePageScreenState extends State<HomePageScreen> {
                     },
                     leading: Icon(Icons.info_outlined),
                     title: Text('Information'),
+                  ),
+                  ListTile(
+                    onTap: () {
+                      Navigator.pushNamed(context, '/pending_request_screen');
+                    },
+                    leading: Icon(Icons.pending_actions),
+                    title: Text('My requests'),
                   ),
                   ListTile(
                     onTap: () {
@@ -395,38 +403,43 @@ class _HomePageScreenState extends State<HomePageScreen> {
         padding: EdgeInsets.only(left: 33.h, right: 30.h),
         child:
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Container(
-              margin: EdgeInsets.only(left: 0.h),
-              padding: EdgeInsets.fromLTRB(9.h, 4.v, 28.h, 2.v),
-              decoration: AppDecoration.outlineBlack900
-                  .copyWith(borderRadius: BorderRadiusStyle.roundedBorder5),
-              child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(height: 14.v),
-                    Padding(
-                      padding: EdgeInsets.only(left: 15.0),
-                      child: CustomImageView(
-                          imagePath: ImageConstant.imgLocation,
-                          height: 43.v,
-                          width: 28.h),
-                    ),
-                    SizedBox(height: 4.v),
-                    GestureDetector(
-                      onTap: () {},
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 15.0),
-                        child: SizedBox(
-                            width: 60.h,
-                            child: Text("Plasma Donation Centres",
-                                maxLines: 3,
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.center,
-                                style: CustomTextStyles.bodyMediumBlack900)),
+          GestureDetector(
+            onTap:(){Navigator.pushNamed(context, '/plasma_donation_page');
+            },
+            child: Container(
+                margin: EdgeInsets.only(left: 0.h),
+                padding: EdgeInsets.fromLTRB(9.h, 4.v, 28.h, 2.v),
+                decoration: AppDecoration.outlineBlack900
+                    .copyWith(borderRadius: BorderRadiusStyle.roundedBorder5),
+                child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(height: 14.v),
+                      Padding(
+                        padding: EdgeInsets.only(left: 15.0),
+                        child: CustomImageView(
+                            imagePath: ImageConstant.imgLocation,
+                            height: 43.v,
+                            width: 28.h),
                       ),
-                    )
-                  ])),
+                      SizedBox(height: 4.v),
+                      GestureDetector(
+                        onTap: () {
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 15.0),
+                          child: SizedBox(
+                              width: 60.h,
+                              child: Text("Plasma Donation Centres",
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
+                                  style: CustomTextStyles.bodyMediumBlack900)),
+                        ),
+                      )
+                    ])),
+          ),
           GestureDetector(
               onTap: () {
                 onTapSixtyNine(context);

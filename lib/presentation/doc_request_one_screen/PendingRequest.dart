@@ -1,4 +1,10 @@
+import 'package:bdc/core/app_export.dart';
+import 'package:bdc/widgets/custom_elevated_button.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'dart:convert';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 class PendingRequest extends StatefulWidget {
   PendingRequest({Key? key});
@@ -8,252 +14,212 @@ class PendingRequest extends StatefulWidget {
 }
 
 class _PendingRequestState extends State<PendingRequest> {
+  final FlutterSecureStorage secureStorage = FlutterSecureStorage();
+
+  Future getRequest() async {
+    String url = "http://192.168.1.4:4444/bloodcare/requests/1/";
+    String? accessToken = await secureStorage.read(key: 'access_token');
+    String? refreshToken = await secureStorage.read(key: 'refresh_token');
+    try {
+      var response = await http.get(
+        Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $accessToken',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        var responseData = jsonDecode(response.body);
+        // if responseData is a Map, wrap it in a list
+        if (responseData is Map) {
+          return [responseData];
+        } else {
+          return responseData;
+        }
+      } else {
+        print('The response is not JSON.');
+        return []; // return an empty list if the response is not JSON
+      }
+    } catch (e) {
+      print('Caught error: $e');
+
+      return [e];
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getRequest();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        width: 375,
-        height: 656,
-        clipBehavior: Clip.antiAlias,
-        decoration: BoxDecoration(color: Color(0xFFC4C4C4)),
-        child: Stack(
-          children: [
-            Positioned(
-              left: 0,
-              top: 0,
-              child: Container(
-                width: 375,
-                height: 659,
-                decoration: BoxDecoration(color: Color(0xFFC62C2C)),
-              ),
-            ),
-            Positioned(
-              left: 0,
-              top: 85,
-              child: Container(
-                width: 375,
-                height: 571,
-                decoration: ShapeDecoration(
-                  color: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(30),
-                      topRight: Radius.circular(30),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            Positioned(
-              left: 117,
-              top: 27,
-              child: Text(
-                'Current Status',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontFamily: 'Montserrat',
-                  fontWeight: FontWeight.w600,
-                  height: 0,
-                ),
-              ),
-            ),
-            Positioned(
-              left: 19,
-              top: 117,
-              child: Container(
-                width: 336,
-                height: 130,
-                child: Stack(
+    return FutureBuilder(
+        future: getRequest(),
+        builder: (context, snapshot) {
+          if (snapshot.data == null) {
+            return Container(
+              child: Center(
+                child: Column(
                   children: [
-                    Positioned(
-                      left: 0,
-                      top: 0,
-                      child: Container(
-                        width: 336,
-                        height: 130,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Color(0x3F000000),
-                              blurRadius: 4,
-                              offset: Offset(0, 4),
-                              spreadRadius: 0,
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      left: 94,
-                      top: 82,
-                      child: SizedBox(
-                        width: 136,
-                        height: 19,
-                        child: Text(
-                          'Nepal National Hospital',
-                          style: TextStyle(
-                            color: Color(0xFF222222),
-                            fontSize: 10,
-                            fontFamily: 'Montserrat',
-                            fontWeight: FontWeight.w400,
-                            height: 0,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      left: 5,
-                      top: 82,
-                      child: SizedBox(
-                        width: 62,
-                        height: 19,
-                        child: Text(
-                          'Kathmandu',
-                          style: TextStyle(
-                            color: Color(0xFF222222),
-                            fontSize: 10,
-                            fontFamily: 'Montserrat',
-                            fontWeight: FontWeight.w400,
-                            height: 0,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      left: 247,
-                      top: 82,
-                      child: SizedBox(
-                        width: 59,
-                        height: 19.26,
-                        child: Text(
-                          '2080-11-01',
-                          style: TextStyle(
-                            color: Color(0xFF222222),
-                            fontSize: 10,
-                            fontFamily: 'Montserrat',
-                            fontWeight: FontWeight.w400,
-                            height: 0,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      left: 247,
-                      top: 68,
-                      child: SizedBox(
-                        width: 53,
-                        height: 14,
-                        child: Text(
-                          'Required Date',
-                          style: TextStyle(
-                            color: Color(0xFF6C6B6B),
-                            fontSize: 7,
-                            fontFamily: 'Montserrat',
-                            fontWeight: FontWeight.w400,
-                            height: 0,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      left: 117,
-                      top: 23,
-                      child: SizedBox(
-                        width: 99,
-                        height: 14,
-                        child: Text(
-                          'Shyam Tamang',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 10,
-                            fontFamily: 'Montserrat',
-                            fontWeight: FontWeight.w600,
-                            height: 0,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      left: 127,
-                      top: 12,
-                      child: SizedBox(
-                        width: 66,
-                        height: 11,
-                        child: Text(
-                          'Contact Person',
-                          style: TextStyle(
-                            color: Color(0xFF6C6B6B),
-                            fontSize: 7,
-                            fontFamily: 'Montserrat',
-                            fontWeight: FontWeight.w400,
-                            height: 0,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      left: 103,
-                      top: 69,
-                      child: SizedBox(
-                        width: 32,
-                        height: 14,
-                        child: Text(
-                          'Hospital',
-                          style: TextStyle(
-                            color: Color(0xFF6C6B6B),
-                            fontSize: 7,
-                            fontFamily: 'Montserrat',
-                            fontWeight: FontWeight.w400,
-                            height: 0,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      left: 18,
-                      top: 69,
-                      child: SizedBox(
-                        width: 32,
-                        height: 14,
-                        child: Text(
-                          'District',
-                          style: TextStyle(
-                            color: Color(0xFF6C6B6B),
-                            fontSize: 7,
-                            fontFamily: 'Montserrat',
-                            fontWeight: FontWeight.w400,
-                            height: 0,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      left: 9,
-                      top: 106,
-                      child: SizedBox(
-                        width: 49,
-                        height: 14,
-                        child: Text(
-                          'Case Details:',
-                          style: TextStyle(
-                            color: Color(0xFF6C6B6B),
-                            fontSize: 7,
-                            fontFamily: 'Montserrat',
-                            fontWeight: FontWeight.w400,
-                            height: 0,
-                          ),
-                        ),
-                      ),
-                    ),
+                    CircularProgressIndicator.adaptive(),
                   ],
                 ),
               ),
+            );
+          }
+
+          final data = snapshot.data as List;
+
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(
+                'MY Pending Requests',
+                style: TextStyle(color: Colors.white),
+              ),
+              backgroundColor: Colors.red[800],
             ),
-          ],
-        ),
-      ),
-    );
+            body: Column(
+              children: [
+                SizedBox(
+                  height: 10,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: ListView.separated(
+                      physics: BouncingScrollPhysics(),
+                      shrinkWrap: true,
+                      separatorBuilder: (context, index) {
+                        return SizedBox(height: 7.v);
+                      },
+                      itemCount: data.length,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 19.h,
+                            vertical: 7.v,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                      top: 7.v,
+                                      bottom: 1.v,
+                                    ),
+                                    child: Text(
+                                      "Contact Person",
+                                      style: CustomTextStyles.bodySmallGray500,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 15.h),
+                                    child: Text(
+                                      "${data[index]['contact_person']}",
+                                      style: theme.textTheme.titleMedium,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 13.v),
+                              Row(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                      top: 1.v,
+                                      bottom: 2.v,
+                                    ),
+                                    child: Text(
+                                      "Location",
+                                      style: CustomTextStyles.bodySmallGray500,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 4.h),
+                                    child: Text(
+                                      "${data[index]['hospital']}",
+                                      style:
+                                          CustomTextStyles.bodySmallGray800_1,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 12.v),
+                              Row(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                      top: 1.v,
+                                      bottom: 2.v,
+                                    ),
+                                    child: Text(
+                                      "Phone No.",
+                                      style: CustomTextStyles.bodySmallGray500,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 7.h),
+                                    child: Text(
+                                      "${data[index]['phoneno']}",
+                                      style:
+                                          CustomTextStyles.bodySmallGray800_1,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 10.v),
+                              Row(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                      top: 2.v,
+                                      bottom: 1.v,
+                                    ),
+                                    child: Text(
+                                      "Date ",
+                                      style: CustomTextStyles.bodySmallGray500,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 22.h),
+                                    child: Text(
+                                      "${data[index]['req_date']}",
+                                      style:
+                                          CustomTextStyles.bodySmallGray800_1,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 15.v),
+                              Padding(
+                                padding: EdgeInsets.only(right: 2.h),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Expanded(
+                                      child: CustomElevatedButton(
+                                        height: 38.v,
+                                        text: "Delete",
+                                        margin: EdgeInsets.only(right: 19.h),
+                                        onPressed: () {},
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }),
+                ),
+              ],
+            ),
+          );
+        });
+    ;
   }
 }
