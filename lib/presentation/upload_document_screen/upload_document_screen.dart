@@ -155,6 +155,13 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> {
             ),
             child: Column(
               children: [
+                Text(
+                  'Click Here',
+                  style: TextStyle(
+                      color: Colors.red[800],
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700),
+                ),
                 SizedBox(height: 10.v),
                 GestureDetector(
                   onTap: showOptions,
@@ -172,7 +179,7 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> {
                 ),
                 SizedBox(height: 40.v),
                 Text(
-                  "It may take some time to verify your document.Please be patient",
+                  "It may take some time to verify your document.Your patience is appreciated.",
                   style: CustomTextStyles.titleSmallPrimaryMedium,
                 ),
                 SizedBox(height: 5.v),

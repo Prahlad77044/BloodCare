@@ -70,6 +70,20 @@ class SuccessfulReqVerified extends StatelessWidget {
                 ),
               ),
             ),
+            SizedBox(
+              height: 20,
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/home_page_screen');
+              },
+              child: Text(
+                'Press here to return to homepage.',
+                style: TextStyle(
+                    color: Colors.red[800],
+                    decoration: TextDecoration.underline),
+              ),
+            )
           ],
         ),
       ),

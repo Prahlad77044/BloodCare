@@ -201,7 +201,12 @@ class _DonorsNearbyState extends State<DonorsNearby> {
                               context: context,
                               builder: (BuildContext context) {
                                 return AlertDialog(
-                                  title: Text('No Search Results'),
+                                  title: Text(
+                                    'No Search Results',
+                                    style: TextStyle(
+                                        color: Colors.red[800],
+                                        fontWeight: FontWeight.bold),
+                                  ),
                                   content: Text(
                                       'No donors found for the given blood group.'),
                                   actions: <Widget>[

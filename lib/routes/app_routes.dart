@@ -111,6 +111,8 @@ class AppRoutes {
 
   static const String requestsScreen = '/requests_screen';
 
+  static const String resetPasswordPage = '/reset_screen';
+
   static const String docHomePageScreen = '/doc_home_page_screen';
 
   static const String historyScreen = '/history_screen';

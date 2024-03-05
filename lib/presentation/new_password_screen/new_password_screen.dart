@@ -1,104 +1,126 @@
-import 'package:bdc/core/app_export.dart';
-import 'package:bdc/widgets/custom_elevated_button.dart';
-import 'package:bdc/widgets/custom_text_form_field.dart';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:bdc/presentation/succesful_acc_recover_dialog/succesful_acc_recover_dialog.dart';
+import 'package:uni_links/uni_links.dart';
+import 'package:http/http.dart' as http;
 
-// ignore_for_file: must_be_immutable
-class NewPasswordScreen extends StatelessWidget {
-  NewPasswordScreen({Key? key}) : super(key: key);
+class NewPasswordScreen extends StatefulWidget {
+  const NewPasswordScreen({Key? key}) : super(key: key);
 
-  TextEditingController newpasswordController = TextEditingController();
+  @override
+  _NewPasswordScreenState createState() => _NewPasswordScreenState();
+}
 
-  TextEditingController newpasswordController1 = TextEditingController();
+class _NewPasswordScreenState extends State<NewPasswordScreen> {
+  TextEditingController newPasswordController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController OTPController = TextEditingController();
 
-  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  Future sendToBackend() async {
+    final response = await http.post(
+      Uri.parse(
+          'http://192.168.1.4:4444/api/user/reset-password-with-otp/'), // Replace this URL with your backend endpoint
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+        // Add other headers if needed
+      },
+      body: jsonEncode(
+        {
+          'new_password': newPasswordController.text.toString(),
+          'email': emailController.text.toString(),
+          'otp': OTPController.text.toString()
+        },
+      ),
+    );
+    print('${response.body}');
+    if (response.statusCode == 200) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(
+              'Successful',
+              style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+            ),
+            content: Text('Your Password has been changed successfully.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/log_in_screen');
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+    // Handle response from backend as needed
+  }
 
   @override
   Widget build(BuildContext context) {
-    mediaQueryData = MediaQuery.of(context);
-    return SafeArea(
-        child: Scaffold(
-            resizeToAvoidBottomInset: false,
-            body: Form(
-                key: _formKey,
-                child: SizedBox(
-                    width: double.maxFinite,
-                    child: Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 41.h, vertical: 44.v),
-                        decoration: AppDecoration.fillOnPrimary,
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Align(
-                                  alignment: Alignment.center,
-                                  child: Text("Forgot Password",
-                                      style: CustomTextStyles
-                                          .headlineSmallPrimary)),
-                              SizedBox(height: 67.v),
-                              Padding(
-                                  padding: EdgeInsets.only(left: 40.h),
-                                  child: Text("Enter the new password",
-                                      style: CustomTextStyles
-                                          .titleMediumBlack900)),
-                              SizedBox(height: 17.v),
-                              Padding(
-                                  padding:
-                                      EdgeInsets.only(left: 26.h, right: 40.h),
-                                  child: CustomTextFormField(
-                                      controller: newpasswordController,
-                                      hintText: "new password",
-                                      textInputType:
-                                          TextInputType.visiblePassword,
-                                      obscureText: true,
-                                      contentPadding: EdgeInsets.symmetric(
-                                          horizontal: 22.h, vertical: 14.v),
-                                      borderDecoration: TextFormFieldStyleHelper
-                                          .outlineBlackTL25)),
-                              SizedBox(height: 27.v),
-                              Padding(
-                                  padding: EdgeInsets.only(left: 26.h),
-                                  child: Text("Re Enter the new password",
-                                      style: CustomTextStyles
-                                          .titleMediumBlack900)),
-                              SizedBox(height: 16.v),
-                              Padding(
-                                  padding:
-                                      EdgeInsets.only(left: 26.h, right: 40.h),
-                                  child: CustomTextFormField(
-                                      controller: newpasswordController1,
-                                      hintText: "new password",
-                                      textInputAction: TextInputAction.done,
-                                      textInputType:
-                                          TextInputType.visiblePassword,
-                                      obscureText: true,
-                                      borderDecoration: TextFormFieldStyleHelper
-                                          .outlineBlackTL25)),
-                              SizedBox(height: 38.v),
-                              CustomElevatedButton(
-                                  text: "Continue",
-                                  margin: EdgeInsets.only(left: 5.h),
-                                  buttonStyle:
-                                      CustomButtonStyles.fillSecondaryContainer,
-                                  buttonTextStyle: CustomTextStyles
-                                      .titleSmallRobotoOnPrimary_1,
-                                  onPressed: () {
-                                    onTapContinue(context);
-                                  }),
-                              SizedBox(height: 38.v)
-                            ]))))));
-  }
-
-  /// Displays a dialog with the [SuccesfulAccRecoverDialog] content.
-  onTapContinue(BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (_) => AlertDialog(
-              content: SuccesfulAccRecoverDialog(),
-              backgroundColor: Colors.transparent,
-              contentPadding: EdgeInsets.zero,
-              insetPadding: const EdgeInsets.only(left: 0),
-            ));
+    return Scaffold(
+      appBar: AppBar(
+        title:
+            Text('New Password Screen', style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.red[800],
+      ),
+      body: Form(
+        key: formKey,
+        child: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Text(
+                  'Please check your email for OTP.',
+                  style: TextStyle(
+                      color: Colors.red,
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+              TextFormField(
+                controller: emailController,
+                decoration: InputDecoration(labelText: 'Email'),
+              ),
+              TextFormField(
+                controller: OTPController,
+                decoration: InputDecoration(labelText: 'OTP'),
+              ),
+              TextFormField(
+                controller: newPasswordController,
+                decoration: InputDecoration(labelText: 'New Password'),
+              ),
+              SizedBox(height: 16.0),
+              Center(
+                child: ElevatedButton(
+                  onPressed: () {
+                    // Handle button press
+                    sendToBackend();
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Text(
+                      'Continue',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

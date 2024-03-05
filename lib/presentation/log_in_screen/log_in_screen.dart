@@ -51,9 +51,9 @@ class _LogInScreenState extends State<LogInScreen> {
         Navigator.pushNamed(context, '/home_page_screen');
 
         return data;
-      } else if (response.statusCode == 400) {
+      } else if (response.statusCode == 404) {
         final Map<String, dynamic> errorData = json.decode(response.body);
-        String errorMessage = errorData['detail'] ?? 'Failed to sign up';
+        String errorMessage = errorData['detail']['error'];
 
         // Display the error message to the user
         showDialog(
@@ -75,7 +75,7 @@ class _LogInScreenState extends State<LogInScreen> {
         );
       } else {
         // Handle login failure
-        throw Exception('error');
+        throw Exception('Phone Number or password not valid.');
       }
     } catch (error) {
       print('Error: $error[]');
@@ -84,7 +84,11 @@ class _LogInScreenState extends State<LogInScreen> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Error'),
+            title: Text(
+              'Login Failed',
+              style: TextStyle(
+                  color: Colors.red[800], fontWeight: FontWeight.bold),
+            ),
             content: Text('$error'),
             actions: [
               TextButton(
@@ -193,12 +197,18 @@ class _LogInScreenState extends State<LogInScreen> {
                           Align(
                               alignment: Alignment.centerRight,
                               child: GestureDetector(
-                                  onTap: loginUser,
+                                  onTap: () {
+                                    Navigator.pushNamed(
+                                        context, '/forgot_password_screen');
+                                  },
                                   child: Padding(
                                       padding: EdgeInsets.only(right: 15.h),
-                                      child: Text("forget password",
-                                          style: CustomTextStyles
-                                              .bodyMediumGray800)))),
+                                      child: Text(
+                                        "Forget password",
+                                        style: TextStyle(
+                                            color: Colors.red[800],
+                                            fontSize: 13),
+                                      )))),
                           SizedBox(height: 56.v),
                           CustomElevatedButton(
                               text: "Log In",
