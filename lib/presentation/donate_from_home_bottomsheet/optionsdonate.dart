@@ -7,7 +7,10 @@ class DonateFromHomeBottomsheet extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.red[800],
-          title: Text('Donate'),
+          title: Text(
+            'Donate',
+            style: TextStyle(color: Colors.white),
+          ),
         ),
         body: Center(
           child: Column(

@@ -11,10 +11,10 @@ class ContactDonorScreen extends StatelessWidget {
     mediaQueryData = MediaQuery.of(context);
     return SafeArea(
         child: Scaffold(
-           appBar: AppBar(
-             title: Text('Donor\'s List'),
-             backgroundColor: Colors.red[800],
-           ),
+            appBar: AppBar(
+              title: Text('Donor\'s List'),
+              backgroundColor: Colors.red[800],
+            ),
             body: SizedBox(
                 width: mediaQueryData.size.width,
                 child: SingleChildScrollView(
@@ -133,7 +133,6 @@ class ContactDonorScreen extends StatelessWidget {
   }
 
   /// Section Widget
-
 
   /// Section Widget
   Widget _buildCall(BuildContext context) {

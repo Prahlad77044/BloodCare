@@ -22,7 +22,8 @@ class _BMICalculatorState extends State<BMICalculator> {
     if (selectedUnit == 'Feet') {
       double feet = double.tryParse(feetController.text) ?? 0.0;
       double inches = double.tryParse(inchesController.text) ?? 0.0;
-      height = feet * 0.3048 + inches * 0.0254; // Convert feet and inches to meters
+      height =
+          feet * 0.3048 + inches * 0.0254; // Convert feet and inches to meters
     } else {
       height = double.tryParse(metersController.text) ?? 0.0;
     }
@@ -58,111 +59,112 @@ class _BMICalculatorState extends State<BMICalculator> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Body Mass Index'),
+        title: Text('Body Mass Index', style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.red[800],
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children:[
-            Padding(
-              padding:  EdgeInsets.only(top: 0,left: 16.0,right: 16,bottom: 10),
-              child: Column(
-                children: [
-                  SizedBox(height: 40),
+        child: Column(children: [
+          Padding(
+            padding: EdgeInsets.only(top: 0, left: 16.0, right: 16, bottom: 10),
+            child: Column(
+              children: [
+                SizedBox(height: 40),
+                TextField(
+                  controller: weightController,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(labelText: 'Enter Weight (kg)'),
+                ),
+                SizedBox(height: 20),
+                if (selectedUnit == 'Feet')
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: feetController,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            labelText: 'Enter Height (Feet)',
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      Expanded(
+                        child: TextField(
+                          controller: inchesController,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            labelText: 'Enter Height (Inches)',
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                if (selectedUnit == 'Meters')
                   TextField(
-                    controller: weightController,
+                    controller: metersController,
                     keyboardType: TextInputType.number,
-                    decoration: InputDecoration(labelText: 'Enter Weight (kg)'),
-                  ),
-                  SizedBox(height: 20),
-                  if (selectedUnit == 'Feet')
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TextField(
-                            controller: feetController,
-                            keyboardType: TextInputType.number,
-                            decoration: InputDecoration(
-                              labelText: 'Enter Height (Feet)',
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                        Expanded(
-                          child: TextField(
-                            controller: inchesController,
-                            keyboardType: TextInputType.number,
-                            decoration: InputDecoration(
-                              labelText: 'Enter Height (Inches)',
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  if (selectedUnit == 'Meters')
-                    TextField(
-                      controller: metersController,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        labelText: 'Enter Height (Meters)',
-                      ),
-                    ),
-                  SizedBox(height: 10),
-                  DropdownButton<String>(
-                    value: selectedUnit,
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        selectedUnit = newValue!;
-                      });
-                    },
-                    items: <String>['Meters', 'Feet']
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                  ),
-                  SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: calculateBMI,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red[800],
-                      elevation: 3,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      padding: EdgeInsets.only(left:20,right: 20,bottom: 30,top: 30),
-                    ),
-                    child: Text('Calculate BMI'),
-                  ),
-                  SizedBox(height: 20),
-                  Text(
-                    'BMI Result: ${bmiResult.toStringAsFixed(2)}',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500,
+                    decoration: InputDecoration(
+                      labelText: 'Enter Height (Meters)',
                     ),
                   ),
-                  SizedBox(height: 10),
-                  Text(
-                    'Result: $resultText',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 15,
-                      fontWeight: FontWeight.w300,
+                SizedBox(height: 10),
+                DropdownButton<String>(
+                  value: selectedUnit,
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      selectedUnit = newValue!;
+                    });
+                  },
+                  items: <String>['Meters', 'Feet']
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
+                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: calculateBMI,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red[800],
+                    elevation: 3,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
                     ),
+                    padding: EdgeInsets.only(
+                        left: 20, right: 20, bottom: 30, top: 30),
                   ),
-                  SizedBox(height: 25,),
-                  Image.asset('assets/images/bmichart.jpg')
-                ],
-              ),
+                  child: Text('Calculate BMI',
+                      style: TextStyle(color: Colors.white)),
+                ),
+                SizedBox(height: 20),
+                Text(
+                  'BMI Result: ${bmiResult.toStringAsFixed(2)}',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  'Result: $resultText',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w300,
+                  ),
+                ),
+                SizedBox(
+                  height: 25,
+                ),
+                Image.asset('assets/images/bmichart.jpg')
+              ],
             ),
+          ),
         ]),
       ),
     );
   }
 }
-
-

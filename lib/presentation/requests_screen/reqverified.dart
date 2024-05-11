@@ -2,8 +2,8 @@ import 'package:bdc/core/app_export.dart';
 import 'package:flutter/material.dart';
 
 // ignore_for_file: must_be_immutable
-class SuccessfulVerified extends StatelessWidget {
-  const SuccessfulVerified({Key? key})
+class SuccessfulReqVerified extends StatelessWidget {
+  const SuccessfulReqVerified({Key? key})
       : super(
           key: key,
         );
@@ -61,7 +61,7 @@ class SuccessfulVerified extends StatelessWidget {
                 padding: EdgeInsets.only(left: 39.0),
                 child: Center(
                   child: Text(
-                    "Your Account has been created successfully. ",
+                    "Your Request has been verified. ",
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 20,
@@ -70,31 +70,18 @@ class SuccessfulVerified extends StatelessWidget {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 20.0, left: 50),
-              child: GestureDetector(
-                onTap: (() {
-                  Navigator.pushNamed(context, '/log_in_screen');
-                }),
-                child: Container(
-                  child: Row(
-                    children: [
-                      Icon(
-                        size: 50,
-                        Icons.arrow_back,
-                        color: Colors.red[800],
-                      ),
-                      Text(
-                        'Login',
-                        style: TextStyle(
-                            fontSize: 30,
-                            color: Colors.red[800],
-                            decoration: TextDecoration.underline,
-                            fontWeight: FontWeight.w100),
-                      )
-                    ],
-                  ),
-                ),
+            SizedBox(
+              height: 20,
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/home_page_screen');
+              },
+              child: Text(
+                'Press here to return to homepage.',
+                style: TextStyle(
+                    color: Colors.red[800],
+                    decoration: TextDecoration.underline),
               ),
             )
           ],

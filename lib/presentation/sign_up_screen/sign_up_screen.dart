@@ -1,76 +1,126 @@
+import 'dart:convert';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart' as http;
 import 'package:bdc/core/app_export.dart';
 import 'package:bdc/widgets/custom_elevated_button.dart';
-import 'package:bdc/widgets/custom_outlined_button.dart';
 import 'package:bdc/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:bdc/widgets/custom_drop_down.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:flutter/cupertino.dart';
-import 'dart:io';
+
+import 'dart:async';
 
 // ignore_for_file: must_be_immutable
 class SignUpScreen extends StatefulWidget {
-  SignUpScreen({Key? key}) : super(key: key);
+  var latitude;
+  var longitude;
+  SignUpScreen({Key? key, required this.latitude, required this.longitude})
+      : super(key: key);
 
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  File? _image;
-  final picker = ImagePicker();
+  bool _isLoading = false;
+  bool _isPasswordHidden = true;
 
-//Image Picker function to get image from gallery
-  Future getImageFromGallery() async {
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+  final FlutterSecureStorage secureStorage = FlutterSecureStorage();
 
-    setState(() {
-      if (pickedFile != null) {
-        _image = File(pickedFile.path);
-      }
-    });
-  }
+  Future signupUser() async {
+    try {
+      setState(() {
+        _isLoading = true;
+      });
 
-  Future showOptions() async {
-    showCupertinoModalPopup(
-      context: context,
-      builder: (context) => CupertinoActionSheet(
-        actions: [
-          CupertinoActionSheetAction(
-            child: Text('Photo Gallery'),
-            onPressed: () {
-              // close the options modal
-              Navigator.of(context).pop();
-              // get image from gallery
-              getImageFromGallery();
+      final response = await http.post(
+          Uri.parse('http://192.168.159.163:4444/api/user/register/'),
+          headers: <String, String>{
+            'Content-Type': 'application/json',
+            // Add other headers if needed
+          },
+          body: jsonEncode(
+            {
+              'phone_number': phoneNumberController.text.toString(),
+              'password': passwordController.text.toString(),
+              'name': nameController.text.toString(),
+              'email': emailController.text.toString(),
+              'date_of_birth': dateOfBirthController.text.toString(),
+              'bloodgroup': bloodgrp.toString(),
+              'province_number': provinceNumberController.text.toString(),
+              'address': addressController.text.toString(),
+              'issue': issueController.text.toString(),
+              // 'latitude': latController.text.toString(),
+              // 'longitude': longController.text.toString(),
+              //'profimg':_image1.toString(),
+              //'docimg':_image2,
             },
-          ),
-          CupertinoActionSheetAction(
-            child: Text('Camera'),
-            onPressed: () {
-              // close the options modal
-              Navigator.of(context).pop();
-              // get image from camera
-              getImageFromCamera();
-            },
-          ),
-        ],
-      ),
-    );
-  }
+          ));
+      print('${response.body}');
+      print('${response.statusCode}');
+      // final storage = new FlutterSecureStorage();
 
-//Image Picker function to get image from camera
-  Future getImageFromCamera() async {
-    final pickedFile = await picker.pickImage(source: ImageSource.camera);
+      if (response.statusCode == 201) {
+        // Successful login, parse the response
+        final Map<String, dynamic> data = json.decode(response.body);
 
-    setState(() {
-      if (pickedFile != null) {
-        _image = File(pickedFile.path);
+        // await storage.write(key: data['key'], value: data['value']);
+        Navigator.pushNamed(context, '/verified');
+
+        return data;
+      } else if (response.statusCode == 400) {
+        final Map<String, dynamic> errorData = json.decode(response.body);
+        String errorMessage = errorData['detail'] ?? 'Failed to sign up';
+
+        // Display the error message to the user
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Sign-Up Failed'),
+              content: Text(errorMessage),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
       } else {
-        print('User didnt pick any image.');
+        // Handle login failure
+        throw Exception('Failed to signup');
       }
-    });
+    } catch (error) {
+      print('Error: $error');
+
+      // Display a generic error message to the user
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Error'),
+            content: Text('$error'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
+
   List<String> dropdownItemList2 = [
     "A+",
     "A-",
@@ -83,6 +133,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   ];
 
   TextEditingController nameController = TextEditingController();
+  TextEditingController latController = TextEditingController();
+  TextEditingController longController = TextEditingController();
 
   TextEditingController emailController = TextEditingController();
 
@@ -97,6 +149,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController addressController = TextEditingController();
 
   TextEditingController issueController = TextEditingController();
+  var bloodgrp;
 
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -125,7 +178,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     child: Text("Please register below",
                                         style: CustomTextStyles
                                             .bodyMediumSegoeUIBluegray900))),
-                            SizedBox(height: 16.v),
                             _buildName(context),
                             SizedBox(height: 13.v),
                             _buildEmail(context),
@@ -139,12 +191,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             Padding(
                                 padding: EdgeInsets.only(right: 7.h),
                                 child: CustomDropDown(
-                                    icon: Container(
-                                        child: CustomImageView(
-                                            height: 9.v, width: 18.h)),
-                                    hintText: "Blood Group",
-                                    items: dropdownItemList2,
-                                    onChanged: (value) {})),
+                                  icon: Container(
+                                      child: CustomImageView(
+                                          height: 9.v, width: 18.h)),
+                                  hintText: "Blood Group",
+                                  autofocus: false,
+                                  items: dropdownItemList2,
+                                  onChanged: (value) {
+                                    bloodgrp = value;
+                                  },
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Blood Group is required';
+                                    }
+                                    // Add additional email validation if needed
+                                    return null;
+                                  },
+                                )),
                             SizedBox(
                               height: 13,
                             ),
@@ -156,12 +219,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 style: CustomTextStyles.bodyMediumPrimary_1),
                             SizedBox(height: 13.v),
                             _buildIssue(context),
-                            SizedBox(height: 13.v),
-                            _buildBROWSE1(context),
-                            SizedBox(height: 35.v),
-                            _buildBROWSE3(context),
                             SizedBox(height: 26.v),
-                            _buildSignUp(context),
+                            CustomElevatedButton(
+                                onPressed: () {
+                                  if (_formKey.currentState?.validate() ??
+                                      false) {
+                                    signupUser();
+                                  }
+                                },
+                                text: "Sign Up",
+                                margin: EdgeInsets.only(left: 7.h),
+                                buttonStyle: CustomButtonStyles.fillPrimaryTL10,
+                                buttonTextStyle: CustomTextStyles
+                                    .titleSmallRobotoOnPrimary_1),
                             SizedBox(height: 37.v),
                             Padding(
                                 padding:
@@ -189,8 +259,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget _buildName(BuildContext context) {
     return Padding(
         padding: EdgeInsets.only(right: 7.h),
-        child:
-            CustomTextFormField(controller: nameController, hintText: "Name"));
+        child: CustomTextFormField(
+          controller: nameController,
+          hintText: "Name",
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Name is required';
+            }
+            // Add additional email validation if needed
+            return null;
+          },
+        ));
   }
 
   /// Section Widget
@@ -198,20 +277,47 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return Padding(
         padding: EdgeInsets.only(right: 7.h),
         child: CustomTextFormField(
-            controller: emailController,
-            hintText: "Email",
-            textInputType: TextInputType.emailAddress));
+          controller: emailController,
+          hintText: "Email",
+          textInputType: TextInputType.emailAddress,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Email is required';
+            }
+            // Add additional email validation if needed
+            return null;
+          },
+        ));
   }
 
   /// Section Widget
   Widget _buildPassword(BuildContext context) {
+    // bool _editable = false;
     return Padding(
         padding: EdgeInsets.only(right: 7.h),
         child: CustomTextFormField(
-            controller: passwordController,
-            hintText: "Password",
-            textInputType: TextInputType.visiblePassword,
-            obscureText: true));
+          autofocus: false,
+          controller: passwordController,
+          hintText: "Password",
+          textInputType: TextInputType.visiblePassword,
+          obscureText: _isPasswordHidden,
+          suffix: IconButton(
+            icon: Icon(
+                _isPasswordHidden ? Icons.visibility : Icons.visibility_off),
+            onPressed: () {
+              setState(() {
+                _isPasswordHidden = !_isPasswordHidden;
+              });
+            },
+          ),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Password is required';
+            }
+            // Add additional email validation if needed
+            return null;
+          },
+        ));
   }
 
   /// Section Widget
@@ -219,8 +325,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return Padding(
         padding: EdgeInsets.only(right: 7.h),
         child: CustomTextFormField(
-            controller: dateOfBirthController,
-            hintText: "Date of Birth (YY-MM-DD)"));
+          controller: dateOfBirthController,
+          hintText: "Date of Birth (YY-MM-DD) in A.D.",
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Date of Birth is required';
+            }
+            // Add additional email validation if needed
+            return null;
+          },
+        ));
   }
 
   /// Section Widget
@@ -228,9 +342,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return Padding(
         padding: EdgeInsets.only(right: 7.h),
         child: CustomTextFormField(
-            controller: phoneNumberController,
-            hintText: "Phone Number",
-            textInputType: TextInputType.phone));
+          controller: phoneNumberController,
+          hintText: "Phone Number",
+          textInputType: TextInputType.phone,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Phone Number is required';
+            }
+            // Add additional email validation if needed
+            return null;
+          },
+        ));
   }
 
   /// Section Widget
@@ -238,12 +360,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return Padding(
         padding: EdgeInsets.only(right: 7.h),
         child: CustomTextFormField(
-            controller: provinceNumberController,
-            hintText: "Province Number",
-            textInputType: TextInputType.number,
-            borderDecoration: TextFormFieldStyleHelper.outlineBlackTL20,
-            filled: true,
-            fillColor: theme.colorScheme.onPrimary));
+          controller: provinceNumberController,
+          hintText: "Province Number",
+          textInputType: TextInputType.number,
+          borderDecoration: TextFormFieldStyleHelper.outlineBlackTL20,
+          filled: true,
+          fillColor: theme.colorScheme.onPrimary,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Province No. is required';
+            }
+            // Add additional email validation if needed
+            return null;
+          },
+        ));
   }
 
   /// Section Widget
@@ -251,11 +381,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return Padding(
         padding: EdgeInsets.only(right: 7.h),
         child: CustomTextFormField(
-            controller: addressController,
-            hintText: "Address ( City, District )",
-            borderDecoration: TextFormFieldStyleHelper.outlineBlackTL20,
-            filled: true,
-            fillColor: theme.colorScheme.onPrimary));
+          controller: addressController,
+          hintText: "Address ( City, District )",
+          borderDecoration: TextFormFieldStyleHelper.outlineBlackTL20,
+          filled: true,
+          fillColor: theme.colorScheme.onPrimary,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Address is required';
+            }
+            // Add additional email validation if needed
+            return null;
+          },
+        ));
   }
 
   /// Section Widget
@@ -268,81 +406,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
             textInputAction: TextInputAction.done,
             borderDecoration: TextFormFieldStyleHelper.outlineBlackTL25));
   }
+}
 
-  /// Section Widget
-  Widget _buildBROWSE(BuildContext context) {
-    return CustomOutlinedButton(
-      onPressed: showOptions,
-        height: 39.v,
-        width: 148.h,
-        text: "BROWSE",
-        buttonStyle: CustomButtonStyles.outlineBlack,
-        buttonTextStyle: CustomTextStyles.titleSmallOnPrimary);
-  }
-
-  /// Section Widget
-  Widget _buildBROWSE1(BuildContext context) {
-    return Padding(
-        padding: EdgeInsets.only(left: 7.h, right: 13.h),
-        child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                  padding: EdgeInsets.only(top: 8.v, bottom: 12.v),
-                  child: Text("Upload Profile Photo",
-                      style: CustomTextStyles.titleSmallPrimary)),
-              _buildBROWSE(context)
-            ]));
-  }
-
-  /// Section Widget
-  Widget _buildBROWSE2(BuildContext context) {
-    return CustomOutlinedButton(
-        onPressed: showOptions,
-        height: 39.v,
-        width: 148.h,
-        text: "BROWSE",
-        margin: EdgeInsets.only(left: 17.h, top: 2.v),
-        buttonStyle: CustomButtonStyles.outlineBlack,
-        buttonTextStyle: CustomTextStyles.titleSmallOnPrimary);
-  }
-
-  /// Section Widget
-  Widget _buildBROWSE3(BuildContext context) {
-    return Padding(
-        padding: EdgeInsets.only(left: 7.h, right: 13.h),
-        child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                  width: 150.h,
-                  margin: EdgeInsets.only(bottom: 6.v),
-                  child: Text("Upload Photo of the document",
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: CustomTextStyles.titleSmallPrimary)),
-              _buildBROWSE2(context)
-            ]));
-  }
-
-  /// Section Widget
-  Widget _buildSignUp(BuildContext context) {
-    return CustomElevatedButton(
-        onPressed: () {
-          Navigator.pushNamed(context, '/verification_screen');
-        },
-        text: "Sign Up",
-        margin: EdgeInsets.only(left: 7.h),
-        buttonStyle: CustomButtonStyles.fillPrimaryTL10,
-        buttonTextStyle: CustomTextStyles.titleSmallRobotoOnPrimary_1);
-  }
-
-  /// Navigates to the bloodTypeSelectScreen when the action is triggered.
-
-  /// Navigates to the logInScreen when the action is triggered.
-  onTapTxtLogIn(BuildContext context) {
-    Navigator.pushNamed(context, AppRoutes.logInScreen);
-  }
+/// Navigates to the logInScreen when the action is triggered.
+onTapTxtLogIn(BuildContext context) {
+  Navigator.pushNamed(context, AppRoutes.logInScreen);
 }

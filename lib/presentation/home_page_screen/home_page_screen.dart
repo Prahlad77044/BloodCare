@@ -1,9 +1,125 @@
 import 'package:bdc/core/app_export.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:bdc/presentation/compatibility_chart_bottomsheet/compatibility_chart_bottomsheet.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'dart:convert';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
-class HomePageScreen extends StatelessWidget {
+class HomePageScreen extends StatefulWidget {
   HomePageScreen({Key? key}) : super(key: key);
+
+  @override
+  State<HomePageScreen> createState() => _HomePageScreenState();
+}
+
+class _HomePageScreenState extends State<HomePageScreen> {
+  final FlutterSecureStorage secureStorage = FlutterSecureStorage();
+  bool isverified = false;
+  void showVerificationPopup() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            'Blood Group Verification',
+            style:
+                TextStyle(color: Colors.red[800], fontWeight: FontWeight.bold),
+          ),
+          content: Text(
+              'Please upload your blood group verification document.You wont be able to donate blood until you are verified.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Skip for now'),
+            ),
+            TextButton(
+              onPressed: () {
+                // Navigate to the upload screen
+                Navigator.pushNamed(context, '/upload_verification');
+              },
+              child: Text('Upload Now'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future checkVerificationStatus() async {
+    String? accessToken = await secureStorage.read(key: 'access_token');
+    String? refreshToken = await secureStorage.read(key: 'refresh_token');
+    // Call your backend API to check verification status
+    String yourToken = "$accessToken";
+
+    Map<String, dynamic> decodedToken = JwtDecoder.decode(yourToken);
+    print('$decodedToken');
+
+    // Extract user ID from the decoded token
+    var userid = decodedToken['user_id'];
+    var response = await http.get(
+      Uri.parse('http://192.168.159.163:4444/api/user/profile/$userid/'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $accessToken',
+      },
+    );
+    print('${response.body}');
+
+    if (response.statusCode == 200) {
+      var responseData = jsonDecode(response.body);
+      void showVerificationPopup() {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text(
+                'Blood Group Verification',
+                style: TextStyle(
+                    color: Colors.red[800], fontWeight: FontWeight.bold),
+              ),
+              content: Text(
+                  'Please upload your blood group verification document.You wont be able to donate blood until you are verified.'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Skip for now'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    // Navigate to the upload screen
+                    Navigator.pushNamed(context, '/upload_verification');
+                  },
+                  child: Text('Upload Now'),
+                ),
+              ],
+            );
+          },
+        );
+      }
+
+      bool isVerified = responseData['is_verified'];
+      setState(() {
+        isverified = isVerified;
+      });
+      if (isVerified == false) {
+        // Show the pop-up
+        showVerificationPopup();
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // Check verification status when the home screen is loaded
+    checkVerificationStatus();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,9 +141,7 @@ class HomePageScreen extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         home: Scaffold(
             appBar: AppBar(
-              title: Text(
-               ''
-              ),
+              title: Text(''),
               backgroundColor: Colors.red[800],
               elevation: 0,
             ),
@@ -37,9 +151,8 @@ class HomePageScreen extends StatelessWidget {
                 children: [
                   DrawerHeader(
                       child: Image.asset(
-                        'assets/images/blood.png',
-                      )),
-
+                    'assets/images/blood.png',
+                  )),
                   ListTile(
                     onTap: () {
                       Navigator.pushNamed(context, '/home_page_screen');
@@ -56,10 +169,10 @@ class HomePageScreen extends StatelessWidget {
                   ),
                   ListTile(
                     onTap: () {
-                      Navigator.pushNamed(context, '/profile_screen');
+                      Navigator.pushNamed(context, '/upload_verification');
                     },
-                    leading: Icon(Icons.account_circle_rounded),
-                    title: Text('My Profile'),
+                    leading: Icon(Icons.edit_document),
+                    title: Text('Upload Document'),
                   ),
                   ListTile(
                     onTap: () {
@@ -74,6 +187,13 @@ class HomePageScreen extends StatelessWidget {
                     },
                     leading: Icon(Icons.info_outlined),
                     title: Text('Information'),
+                  ),
+                  ListTile(
+                    onTap: () {
+                      Navigator.pushNamed(context, '/pending_request_screen');
+                    },
+                    leading: Icon(Icons.pending_actions),
+                    title: Text('My requests'),
                   ),
                   ListTile(
                     onTap: () {
@@ -120,22 +240,20 @@ class HomePageScreen extends StatelessWidget {
                                         width: 380.h,
                                         alignment: Alignment.center),
                                     Padding(
-                                      padding:  EdgeInsets.all(15.0),
+                                      padding: EdgeInsets.all(15.0),
                                       child: Container(
                                           height: 262.v,
                                           width: 301.h,
-
                                           child: Stack(
-                                              alignment:
-                                                  Alignment.centerLeft,
+                                              alignment: Alignment.centerLeft,
                                               children: [
                                                 CustomImageView(
                                                     imagePath: ImageConstant
                                                         .imgFreepikCharacter,
                                                     height: 235.v,
                                                     width: 97.h,
-                                                    alignment: Alignment
-                                                        .bottomRight,
+                                                    alignment:
+                                                        Alignment.bottomRight,
                                                     margin: EdgeInsets.only(
                                                         right: 4.h,
                                                         bottom: 19.v)),
@@ -144,38 +262,38 @@ class HomePageScreen extends StatelessWidget {
                                                         .imgFreepikCharacterGray400,
                                                     height: 262.v,
                                                     width: 232.h,
-                                                    alignment: Alignment
-                                                        .centerLeft)
+                                                    alignment:
+                                                        Alignment.centerLeft)
                                               ])),
                                     )
                                   ]))),
                       GestureDetector(
                         onTap: () {
-                          onTapSeventyTwo(context);
+                          if (isverified == true) {
+                            onTapSeventyTwo(context);
+                          } else {
+                            showVerificationPopup();
+                          }
                         },
                         child: Container(
                             margin: EdgeInsets.only(left: 34.h),
                             padding: EdgeInsets.symmetric(
                                 horizontal: 32.h, vertical: 19.v),
-                            decoration: AppDecoration.outlineBlack900
-                                .copyWith(
-                                    borderRadius:
-                                        BorderRadiusStyle.roundedBorder5),
+                            decoration: AppDecoration.outlineBlack900.copyWith(
+                                borderRadius: BorderRadiusStyle.roundedBorder5),
                             child: Column(
                                 mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   CustomImageView(
-                                      imagePath:
-                                          ImageConstant.imgFloatingIcon,
+                                      imagePath: ImageConstant.imgFloatingIcon,
                                       height: 44.v,
                                       width: 34.h,
                                       margin: EdgeInsets.only(left: 7.h)),
                                   SizedBox(height: 10.v),
                                   Text("Donate",
-                                      style: CustomTextStyles
-                                          .bodyMediumBlack900),
+                                      style:
+                                          CustomTextStyles.bodyMediumBlack900),
                                   SizedBox(height: 7.v)
                                 ])),
                       ),
@@ -186,14 +304,14 @@ class HomePageScreen extends StatelessWidget {
                                 onTapSixtySev(context);
                               },
                               child: Container(
-                                  margin: EdgeInsets.only(
-                                      left: 240.h, right: 30.h),
+                                  margin:
+                                      EdgeInsets.only(left: 240.h, right: 30.h),
                                   padding: EdgeInsets.only(
                                       top: 20.v, right: 28.h, bottom: 20.v),
                                   decoration: AppDecoration.outlineBlack900
                                       .copyWith(
-                                          borderRadius: BorderRadiusStyle
-                                              .roundedBorder5),
+                                          borderRadius:
+                                              BorderRadiusStyle.roundedBorder5),
                                   child: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       crossAxisAlignment:
@@ -254,11 +372,11 @@ class HomePageScreen extends StatelessWidget {
                       ]))),
           GestureDetector(
               onTap: () {
-                onTapSeventyOne(context);
+                Navigator.pushNamed(context, '/profile_screen');
               },
               child: Container(
                   padding:
-                      EdgeInsets.symmetric(horizontal: 29.h, vertical: 13.v),
+                      EdgeInsets.symmetric(horizontal: 22.h, vertical: 13.v),
                   decoration: AppDecoration.outlineBlack900
                       .copyWith(borderRadius: BorderRadiusStyle.roundedBorder5),
                   child: Column(
@@ -266,13 +384,13 @@ class HomePageScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         SizedBox(height: 5.v),
-                        CustomImageView(
-                            imagePath: ImageConstant.imgClock,
-                            height: 45.v,
-                            width: 47.h,
-                            alignment: Alignment.centerRight),
-                        SizedBox(height: 25.v),
-                        Text("History",
+                        Icon(
+                          Icons.account_circle_sharp,
+                          color: Colors.red[800],
+                          size: 55,
+                        ),
+                        SizedBox(height: 15.v),
+                        Text("My Profile",
                             style: CustomTextStyles.bodyMediumGray900),
                         SizedBox(height: 2.v)
                       ])))
@@ -285,43 +403,50 @@ class HomePageScreen extends StatelessWidget {
         padding: EdgeInsets.only(left: 33.h, right: 30.h),
         child:
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Container(
-              margin: EdgeInsets.only(left: 0.h),
-              padding: EdgeInsets.fromLTRB(9.h, 4.v, 28.h, 2.v),
-              decoration: AppDecoration.outlineBlack900
-                  .copyWith(borderRadius: BorderRadiusStyle.roundedBorder5),
-              child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(height: 14.v),
-                    Padding(
-                      padding:  EdgeInsets.only(left: 15.0),
-                      child: CustomImageView(
-                          imagePath: ImageConstant.imgLocation,
-                          height: 43.v,
-                          width: 28.h),
-                    ),
-                    SizedBox(height: 4.v),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 15.0),
-                      child: SizedBox(
-                          width: 60.h,
-                          child: Text("Plasma Donation Centres",
-                              maxLines: 3,
-                              overflow: TextOverflow.ellipsis,
-                              textAlign: TextAlign.center,
-                              style: CustomTextStyles.bodyMediumBlack900)),
-                    )
-                  ])),
+          GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(context, '/plasma_donation_page');
+            },
+            child: Container(
+                margin: EdgeInsets.only(left: 0.h),
+                padding: EdgeInsets.fromLTRB(9.h, 4.v, 28.h, 2.v),
+                decoration: AppDecoration.outlineBlack900
+                    .copyWith(borderRadius: BorderRadiusStyle.roundedBorder5),
+                child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(height: 14.v),
+                      Padding(
+                        padding: EdgeInsets.only(left: 15.0),
+                        child: CustomImageView(
+                            imagePath: ImageConstant.imgLocation,
+                            height: 43.v,
+                            width: 28.h),
+                      ),
+                      SizedBox(height: 4.v),
+                      GestureDetector(
+                        onTap: () {},
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 15.0),
+                          child: SizedBox(
+                              width: 60.h,
+                              child: Text("Plasma Donation Centres",
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
+                                  style: CustomTextStyles.bodyMediumBlack900)),
+                        ),
+                      )
+                    ])),
+          ),
           GestureDetector(
               onTap: () {
                 onTapSixtyNine(context);
               },
               child: Container(
                   margin: EdgeInsets.only(left: 10.h),
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 9.h, vertical: 4.v),
+                  padding: EdgeInsets.symmetric(horizontal: 9.h, vertical: 4.v),
                   decoration: AppDecoration.outlineBlack900
                       .copyWith(borderRadius: BorderRadiusStyle.roundedBorder5),
                   child: Column(
@@ -371,9 +496,6 @@ class HomePageScreen extends StatelessWidget {
   }
 
   /// Navigates to the historyScreen when the action is triggered.
-  onTapSeventyOne(BuildContext context) {
-    Navigator.pushNamed(context, AppRoutes.historyScreen);
-  }
 
   /// Navigates to the donateScreen when the action is triggered.
   onTapSeventyTwo(BuildContext context) {
