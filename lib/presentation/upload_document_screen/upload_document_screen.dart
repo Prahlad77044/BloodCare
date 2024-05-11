@@ -87,7 +87,7 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> {
     // Create a multipart request
     var request = http.MultipartRequest(
       'POST',
-      Uri.parse('http://192.168.1.4:4444/api/user/documents/'),
+      Uri.parse('http://192.168.159.163:4444/api/user/documents/'),
     );
 
     request.headers['Authorization'] = 'Bearer $yourToken';

@@ -25,19 +25,19 @@ class _LogInScreenState extends State<LogInScreen> {
         CircularProgressIndicator.adaptive();
       });
 
-      final response =
-          await http.post(Uri.parse('http://192.168.1.4:4444/api/user/login/'),
-              headers: <String, String>{
-                'Content-Type': 'application/json',
+      final response = await http.post(
+          Uri.parse('http://192.168.159.163:4444/api/user/login/'),
+          headers: <String, String>{
+            'Content-Type': 'application/json',
 
-                // Add other headers if needed
-              },
-              body: jsonEncode(
-                {
-                  'phone_number': phoneNumberController.text.toString(),
-                  'password': passwordController.text.toString(),
-                },
-              ));
+            // Add other headers if needed
+          },
+          body: jsonEncode(
+            {
+              'phone_number': phoneNumberController.text.toString(),
+              'password': passwordController.text.toString(),
+            },
+          ));
       print('${response.body}');
       print('${response.statusCode}');
 

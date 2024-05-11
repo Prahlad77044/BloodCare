@@ -61,7 +61,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
     // Extract user ID from the decoded token
     var userid = decodedToken['user_id'];
     var response = await http.get(
-      Uri.parse('http://192.168.1.4:4444/api/user/profile/$userid/'),
+      Uri.parse('http://192.168.159.163:4444/api/user/profile/$userid/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $accessToken',
@@ -404,7 +404,8 @@ class _HomePageScreenState extends State<HomePageScreen> {
         child:
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           GestureDetector(
-            onTap:(){Navigator.pushNamed(context, '/plasma_donation_page');
+            onTap: () {
+              Navigator.pushNamed(context, '/plasma_donation_page');
             },
             child: Container(
                 margin: EdgeInsets.only(left: 0.h),
@@ -425,8 +426,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
                       ),
                       SizedBox(height: 4.v),
                       GestureDetector(
-                        onTap: () {
-                        },
+                        onTap: () {},
                         child: Padding(
                           padding: const EdgeInsets.only(left: 15.0),
                           child: SizedBox(

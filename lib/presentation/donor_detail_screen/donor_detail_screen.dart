@@ -36,9 +36,7 @@ class _DonorDetailScreenState extends State<DonorDetailScreen> {
         ''; // Provide default empty string if longitude is null
   }
 
-  List<String> dropdownItemList = [
-    "1","2","3","4","5","6","7"
-  ];
+  List<String> dropdownItemList = ["1", "2", "3", "4", "5", "6", "7"];
 
   TextEditingController cityController = TextEditingController();
 
@@ -134,7 +132,7 @@ class _DonorDetailScreenState extends State<DonorDetailScreen> {
   final FlutterSecureStorage secureStorage = FlutterSecureStorage();
 
   Future detailsSubmit() async {
-    var url = 'http://192.168.1.4:4444/bloodcare/donors/';
+    var url = 'http://192.168.159.163:4444/bloodcare/donors/';
     String? accessToken = await secureStorage.read(key: 'access_token');
     String? refreshToken = await secureStorage.read(key: 'refresh_token');
     print('button pressed');

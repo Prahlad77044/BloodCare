@@ -26,7 +26,7 @@ class _DocRequestOneScreenState extends State<DocRequestOneScreen> {
   var district;
 
   Future RequestdetailsSubmit() async {
-    var url = 'http://192.168.1.4:4444/bloodcare/requests/';
+    var url = 'http://192.168.159.163:4444/bloodcare/reqblood/';
     String? accessToken = await secureStorage.read(key: 'access_token');
     String? refreshToken = await secureStorage.read(key: 'refresh_token');
     print('button pressed');
@@ -53,13 +53,14 @@ class _DocRequestOneScreenState extends State<DocRequestOneScreen> {
         'case_details': caseDetailsController.text.toString()
       }),
     );
-    if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
       final Map<String, dynamic> data = json.decode(response.body);
       Navigator.pushNamed(context, '/suc_req_screen');
 
       // Navigator.pushNamed(context as BuildContext, '/home_page_screen');
       return ("${response.statusCode}");
     } else {
+      print('${response.statusCode}');
       showDialog(
         context: context,
         builder: (BuildContext context) {

@@ -11,7 +11,8 @@ class ForgotPasswordScreen extends StatelessWidget {
 
     try {
       final response = await http.post(
-        Uri.parse('http://192.168.1.4:4444/api/user/send-reset-password-otp/'),
+        Uri.parse(
+            'http://192.168.159.163:4444/api/user/send-reset-password-otp/'),
         body: {'email': email},
       );
 

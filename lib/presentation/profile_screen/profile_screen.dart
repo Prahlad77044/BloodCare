@@ -34,7 +34,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   //   var userid = decodedToken['user_id'];
   //
   //   try {
-  //     String url = "http://192.168.1.4:4444/api/user/profilepictures/";
+  //     String url = "http://192.168.159.163:4444/api/user/profilepictures/";
   //
   //     var response = await http.get(
   //       Uri.parse(url),
@@ -76,7 +76,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     // Extract user ID from the decoded token
     var userid = decodedToken['user_id'];
     try {
-      String url = "http://192.168.1.4:4444/api/user/profile/$userid";
+      String url = "http://192.168.159.163:4444/api/user/profile/$userid";
 
       var response = await http.get(
         Uri.parse(url),
@@ -113,7 +113,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   //   var userid = decodedToken['user_id'];
 
-  //   String url = "http://192.168.1.4:4444/api/profile/$userid";
+  //   String url = "http://192.168.159.163:4444/api/profile/$userid";
 
   //   try {
   //     var response = await http.get(
@@ -179,363 +179,341 @@ class _ProfileScreenState extends State<ProfileScreen> {
           //     builder: (context, snapshot) {
           //       final data = snapshot.data as List;
 
-                return Scaffold(
-                  backgroundColor: Colors.red[50],
-                  appBar: AppBar(
-                    backgroundColor: Colors.red[800],
-                    title: Text(
-                      'My Profile',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    elevation: 0,
+          return Scaffold(
+            backgroundColor: Colors.red[50],
+            appBar: AppBar(
+              backgroundColor: Colors.red[800],
+              title: Text(
+                'My Profile',
+                style: TextStyle(color: Colors.white),
+              ),
+              elevation: 0,
+            ),
+            body: SingleChildScrollView(
+              child: Stack(
+                children: [
+                  Container(
+                    height: 120,
+                    width: double.maxFinite,
+                    child: Text(''),
+                    decoration: BoxDecoration(
+                        color: Colors.red[800],
+                        borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(50),
+                            bottomRight: Radius.circular(50))),
                   ),
-                  body: SingleChildScrollView(
-                    child: Stack(
-                      children: [
-                        Container(
-                          height: 120,
-                          width: double.maxFinite,
-                          child: Text(''),
+                  Padding(
+                    padding: EdgeInsets.only(top: 15.0),
+                    child: Center(
+                      child: GestureDetector(
+                        onTap: () {},
+                        child: Container(
+                          height: 130,
+                          width: 130,
                           decoration: BoxDecoration(
-                              color: Colors.red[800],
-                              borderRadius: BorderRadius.only(
-                                  bottomLeft: Radius.circular(50),
-                                  bottomRight: Radius.circular(50))),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 15.0),
-                          child: Center(
-                            child: GestureDetector(
-                              onTap: () {},
-                              child: Container(
-                                height: 130,
-                                width: 130,
-                                decoration: BoxDecoration(
-                                    color: Colors.grey,
-                                    borderRadius: BorderRadius.circular(100),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black12,
-                                        blurRadius: 3.0,
-                                        spreadRadius: 2.0,
-                                      ),
-                                    ]),
-                                child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(100),
-                                    child: //data[0]['profilepic'] == null
-                                        //     ?
-                                        Image.asset(
-                                      'assets/images/profile1.png',
-                                    )
-                                    // : Image.network(
-                                    //     "http://192.168.1.4:4444" +
-                                    //         "${data[0]['profilepic']}", // Assuming image is a String URL
-                                    //     fit: BoxFit.cover,
-                                    //   ),
-                                    ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 150),
-                          child: Center(
-                            child: Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(30),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black12,
-                                      offset: Offset(
-                                        0,
-                                        0,
-                                      ),
-                                      blurRadius: 2.0,
-                                      spreadRadius: 3.0,
-                                    ),
-                                  ],
-                                ),
-                                child: Center(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      children: [
-                                        Text(
-                                          _controller.text,
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        Padding(
-                                          padding: EdgeInsets.all(4.0),
-                                          child: Text(
-                                            'No. of Successful Donations',
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.w600,
-                                                color: Colors.red[800]),
-                                          ),
-                                        ),
-                                        Text(
-                                          '3',
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.w500,
-                                              color: Colors.red[800]),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                              top: 280.0, left: 10, right: 10, bottom: 10),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(30),
+                              color: Colors.grey,
+                              borderRadius: BorderRadius.circular(100),
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.black12,
-                                  offset: Offset(
-                                    0,
-                                    0,
-                                  ),
-                                  blurRadius: 2.0,
+                                  blurRadius: 3.0,
                                   spreadRadius: 2.0,
                                 ),
-                              ],
-                            ),
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                      left: 15.0,
-                                      top: 25,
-                                      bottom: 15,
-                                      right: 15),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey[300],
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.black12,
-                                          offset: Offset(
-                                            0,
-                                            0,
-                                          ),
-                                          blurRadius: 2.0,
-                                          spreadRadius: 3.0,
-                                        ),
-                                      ],
-                                    ),
-                                    child: TextFormField(
-                                      decoration: InputDecoration(
-                                          contentPadding: EdgeInsets.all(10),
-                                          labelText: 'Full Name',
-                                          labelStyle:
-                                              TextStyle(color: Colors.red[800]),
-                                          floatingLabelBehavior:
-                                              FloatingLabelBehavior.always),
-                                      keyboardType: TextInputType.name,
-                                      style: TextStyle(
-                                        color: Colors.black45,
-                                      ),
-                                      enabled: _editable,
-                                      controller: _controller,
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                      left: 15.0,
-                                      top: 2,
-                                      bottom: 15,
-                                      right: 15),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey[300],
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.black12,
-                                          offset: Offset(
-                                            0,
-                                            0,
-                                          ),
-                                          blurRadius: 2.0,
-                                          spreadRadius: 3.0,
-                                        ),
-                                      ],
-                                    ),
-                                    child: TextFormField(
-                                      decoration: InputDecoration(
-                                          contentPadding: EdgeInsets.all(10),
-                                          labelText: 'Address',
-                                          labelStyle:
-                                              TextStyle(color: Colors.red[800]),
-                                          floatingLabelBehavior:
-                                              FloatingLabelBehavior.always),
-                                      keyboardType: TextInputType.text,
-                                      style: TextStyle(color: Colors.black45),
-                                      enabled: _editable,
-                                      controller: _controller1,
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                      left: 15.0,
-                                      top: 2,
-                                      bottom: 15,
-                                      right: 15),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey[300],
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.black12,
-                                          offset: Offset(
-                                            0,
-                                            0,
-                                          ),
-                                          blurRadius: 2.0,
-                                          spreadRadius: 3.0,
-                                        ),
-                                      ],
-                                    ),
-                                    child: TextFormField(
-                                      decoration: InputDecoration(
-                                          contentPadding: EdgeInsets.all(10),
-                                          labelText: 'Phone No.',
-                                          labelStyle:
-                                              TextStyle(color: Colors.red[800]),
-                                          floatingLabelBehavior:
-                                              FloatingLabelBehavior.always),
-                                      keyboardType: TextInputType.phone,
-                                      style: TextStyle(color: Colors.black45),
-                                      enabled: _editable,
-                                      controller: _controller2,
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                      left: 15.0,
-                                      top: 2,
-                                      bottom: 15,
-                                      right: 15),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey[300],
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.black12,
-                                          offset: Offset(
-                                            0,
-                                            0,
-                                          ),
-                                          blurRadius: 2.0,
-                                          spreadRadius: 3.0,
-                                        ),
-                                      ],
-                                    ),
-                                    child: TextFormField(
-                                      decoration: InputDecoration(
-                                          contentPadding: EdgeInsets.all(10),
-                                          labelText: 'Blood Group',
-                                          labelStyle:
-                                              TextStyle(color: Colors.red[800]),
-                                          floatingLabelBehavior:
-                                              FloatingLabelBehavior.always),
-                                      keyboardType: TextInputType.text,
-                                      style: TextStyle(color: Colors.black45),
-                                      enabled: _editable,
-                                      controller: _controller4,
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                      left: 15.0,
-                                      top: 2,
-                                      bottom: 15,
-                                      right: 15),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey[300],
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.black12,
-                                          offset: Offset(
-                                            0,
-                                            0,
-                                          ),
-                                          blurRadius: 2.0,
-                                          spreadRadius: 3.0,
-                                        ),
-                                      ],
-                                    ),
-                                    child: TextFormField(
-                                      decoration: InputDecoration(
-                                          contentPadding: EdgeInsets.all(10),
-                                          labelText: 'Email Id',
-                                          labelStyle:
-                                              TextStyle(color: Colors.red[800]),
-                                          floatingLabelBehavior:
-                                              FloatingLabelBehavior.always),
-                                      keyboardType: TextInputType.emailAddress,
-                                      style: TextStyle(color: Colors.black45),
-                                      enabled: _editable,
-                                      controller: _controller3,
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: SizedBox(
-                                    height: 40,
-                                    width: 100,
-                                    child: ElevatedButton(
-                                        onPressed: () {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      EditProfile(
-                                                          name:
-                                                              _controller.text,
-                                                          phone:
-                                                              _controller2.text,
-                                                          address:
-                                                              _controller1.text,
-                                                          email:
-                                                              _controller3.text,
-                                                          bloodgroup:
-                                                              _controller4
-                                                                  .text)));
-                                        },
-                                        child: Text(
-                                          'Edit Profile',
-                                          style: TextStyle(color: Colors.white),
-                                        )),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        )
-                      ],
+                              ]),
+                          child: ClipRRect(
+                              borderRadius: BorderRadius.circular(100),
+                              child: //data[0]['profilepic'] == null
+                                  //     ?
+                                  Image.asset(
+                                'assets/images/profile1.png',
+                              )
+                              // : Image.network(
+                              //     "https://192.168.159.163" +
+                              //         "${data[0]['profilepic']}", // Assuming image is a String URL
+                              //     fit: BoxFit.cover,
+                              //   ),
+                              ),
+                        ),
+                      ),
                     ),
                   ),
-                );
-              });
-
+                  Padding(
+                    padding: EdgeInsets.only(top: 150),
+                    child: Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(30),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black12,
+                                offset: Offset(
+                                  0,
+                                  0,
+                                ),
+                                blurRadius: 2.0,
+                                spreadRadius: 3.0,
+                              ),
+                            ],
+                          ),
+                          child: Center(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    _controller.text,
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(4.0),
+                                    child: Text(
+                                      'No. of Successful Donations',
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.red[800]),
+                                    ),
+                                  ),
+                                  Text(
+                                    '3',
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.red[800]),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                        top: 280.0, left: 10, right: 10, bottom: 10),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(30),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black12,
+                            offset: Offset(
+                              0,
+                              0,
+                            ),
+                            blurRadius: 2.0,
+                            spreadRadius: 2.0,
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(
+                                left: 15.0, top: 25, bottom: 15, right: 15),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.grey[300],
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black12,
+                                    offset: Offset(
+                                      0,
+                                      0,
+                                    ),
+                                    blurRadius: 2.0,
+                                    spreadRadius: 3.0,
+                                  ),
+                                ],
+                              ),
+                              child: TextFormField(
+                                decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.all(10),
+                                    labelText: 'Full Name',
+                                    labelStyle:
+                                        TextStyle(color: Colors.red[800]),
+                                    floatingLabelBehavior:
+                                        FloatingLabelBehavior.always),
+                                keyboardType: TextInputType.name,
+                                style: TextStyle(
+                                  color: Colors.black45,
+                                ),
+                                enabled: _editable,
+                                controller: _controller,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                                left: 15.0, top: 2, bottom: 15, right: 15),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.grey[300],
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black12,
+                                    offset: Offset(
+                                      0,
+                                      0,
+                                    ),
+                                    blurRadius: 2.0,
+                                    spreadRadius: 3.0,
+                                  ),
+                                ],
+                              ),
+                              child: TextFormField(
+                                decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.all(10),
+                                    labelText: 'Address',
+                                    labelStyle:
+                                        TextStyle(color: Colors.red[800]),
+                                    floatingLabelBehavior:
+                                        FloatingLabelBehavior.always),
+                                keyboardType: TextInputType.text,
+                                style: TextStyle(color: Colors.black45),
+                                enabled: _editable,
+                                controller: _controller1,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                                left: 15.0, top: 2, bottom: 15, right: 15),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.grey[300],
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black12,
+                                    offset: Offset(
+                                      0,
+                                      0,
+                                    ),
+                                    blurRadius: 2.0,
+                                    spreadRadius: 3.0,
+                                  ),
+                                ],
+                              ),
+                              child: TextFormField(
+                                decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.all(10),
+                                    labelText: 'Phone No.',
+                                    labelStyle:
+                                        TextStyle(color: Colors.red[800]),
+                                    floatingLabelBehavior:
+                                        FloatingLabelBehavior.always),
+                                keyboardType: TextInputType.phone,
+                                style: TextStyle(color: Colors.black45),
+                                enabled: _editable,
+                                controller: _controller2,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                                left: 15.0, top: 2, bottom: 15, right: 15),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.grey[300],
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black12,
+                                    offset: Offset(
+                                      0,
+                                      0,
+                                    ),
+                                    blurRadius: 2.0,
+                                    spreadRadius: 3.0,
+                                  ),
+                                ],
+                              ),
+                              child: TextFormField(
+                                decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.all(10),
+                                    labelText: 'Blood Group',
+                                    labelStyle:
+                                        TextStyle(color: Colors.red[800]),
+                                    floatingLabelBehavior:
+                                        FloatingLabelBehavior.always),
+                                keyboardType: TextInputType.text,
+                                style: TextStyle(color: Colors.black45),
+                                enabled: _editable,
+                                controller: _controller4,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                                left: 15.0, top: 2, bottom: 15, right: 15),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.grey[300],
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black12,
+                                    offset: Offset(
+                                      0,
+                                      0,
+                                    ),
+                                    blurRadius: 2.0,
+                                    spreadRadius: 3.0,
+                                  ),
+                                ],
+                              ),
+                              child: TextFormField(
+                                decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.all(10),
+                                    labelText: 'Email Id',
+                                    labelStyle:
+                                        TextStyle(color: Colors.red[800]),
+                                    floatingLabelBehavior:
+                                        FloatingLabelBehavior.always),
+                                keyboardType: TextInputType.emailAddress,
+                                style: TextStyle(color: Colors.black45),
+                                enabled: _editable,
+                                controller: _controller3,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: SizedBox(
+                              height: 40,
+                              width: 100,
+                              child: ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => EditProfile(
+                                                name: _controller.text,
+                                                phone: _controller2.text,
+                                                address: _controller1.text,
+                                                email: _controller3.text,
+                                                bloodgroup:
+                                                    _controller4.text)));
+                                  },
+                                  child: Text(
+                                    'Edit Profile',
+                                    style: TextStyle(color: Colors.white),
+                                  )),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          );
+        });
   }
 }

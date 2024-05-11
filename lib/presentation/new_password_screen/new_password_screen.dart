@@ -26,7 +26,7 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
   Future sendToBackend() async {
     final response = await http.post(
       Uri.parse(
-          'http://192.168.1.4:4444/api/user/reset-password-with-otp/'), // Replace this URL with your backend endpoint
+          'http://192.168.159.163:4444/api/user/reset-password-with-otp/'), // Replace this URL with your backend endpoint
       headers: <String, String>{
         'Content-Type': 'application/json',
         // Add other headers if needed

@@ -2,6 +2,7 @@
 
 import 'dart:async';
 import 'dart:convert';
+import 'package:bdc/presentation/requests_screen/widgets/requests%20screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -25,7 +26,7 @@ class _DonorsNearbyState extends State<DonorsNearby> {
   Future<List<Map<String, dynamic>>> fetchUserLocations() async {
     String? accessToken = await secureStorage.read(key: 'access_token');
     String? refreshToken = await secureStorage.read(key: 'refresh_token');
-    var url = 'http://192.168.1.4:4444/bloodcare/donors/';
+    var url = 'http://192.168.159.163:4444/bloodcare/donors/';
     var response = await http.get(
       Uri.parse(url),
       headers: <String, String>{
@@ -63,7 +64,8 @@ class _DonorsNearbyState extends State<DonorsNearby> {
       String bloodGroup) async {
     String? accessToken = await secureStorage.read(key: 'access_token');
     String? refreshToken = await secureStorage.read(key: 'refresh_token');
-    var url = 'http://192.168.1.4:4444/bloodcare/donors/?search=$bloodGroup';
+    var url =
+        'http://192.168.159.163:4444/bloodcare/donors/?search=$bloodGroup';
     var response = await http.get(
       Uri.parse(url),
       headers: <String, String>{
@@ -336,6 +338,10 @@ class _DonorsNearbyState extends State<DonorsNearby> {
             ),
             ElevatedButton(
               onPressed: () {
+                Navigator.pop(context); // Close the thank you page
+
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => ThankYouPage()));
                 // Add your logic here to handle confirmation
               },
               child: Padding(

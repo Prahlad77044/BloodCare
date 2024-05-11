@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../requests_screen/widgets/requests screen.dart';
+
 class DonorListScreen extends StatefulWidget {
   const DonorListScreen({Key? key}) : super(key: key);
 
@@ -17,7 +19,7 @@ class _DonorListScreenState extends State<DonorListScreen> {
   final FlutterSecureStorage secureStorage = FlutterSecureStorage();
 
   Future getDonors() async {
-    String url = "http://192.168.1.4:4444/bloodcare/donors/";
+    String url = "http://192.168.159.163:4444/bloodcare/donors/";
     String? accessToken = await secureStorage.read(key: 'access_token');
     print("$accessToken");
     String? refreshToken = await secureStorage.read(key: 'refresh_token');
@@ -341,7 +343,16 @@ class _DonorListScreenState extends State<DonorListScreen> {
                 // Add your logic here to handle confirmation
               },
               child: GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Navigator.pop(context); // Close the thank you page
+
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            ThankYouPage()), // Navigate to the thank you page
+                  );
+                },
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text('Confirm', style: TextStyle(color: Colors.white)),
